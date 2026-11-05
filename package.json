@@ -1,0 +1,18 @@
+{
+  "name": "mobile-locker-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/tailwind-input.css -o ./css/tailwind.css --watch",
+    "build": "tailwindcss -i ./src/tailwind-input.css -o ./css/tailwind.css --minify",
+    "package": "node scripts/package.js",
+    "ship": "npm run build && npm run package"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

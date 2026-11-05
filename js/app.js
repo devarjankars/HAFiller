@@ -1,0 +1,754 @@
+/**
+ * app.js — Navigation & UI logic for the HA Filler Differentiator
+ *
+ * Responsibilities:
+ *  - showView(viewId)       → switch between #home and #app
+ *  - navigateTo(sectionId)  → from home cards, go to app + show section
+ *  - showSection(id, event) → switch content section inside the app shell
+ *  - switchTab / switchFillerTab / switchGraphTable — tab & toggle helpers
+ *  - Modal open/close helpers
+ *  - Sidebar mobile toggle
+ *  - Filler Selection body-part interaction
+ *  - Products bar toggle
+ *
+ * NOTE: product data, chart rendering, and product grid
+ *       are handled by product.js (loaded before this file).
+ */
+
+"use strict";
+
+const mobilePropertiesNavigation = window.matchMedia('(max-width: 768px)');
+
+function isPropertiesNavigationDisabled() {
+  return mobilePropertiesNavigation.matches;
+}
+
+function updatePropertiesNavigationAvailability() {
+  const disabled = isPropertiesNavigationDisabled();
+  const homeCard = document.getElementById('nav-product-selection');
+  const menuItem = document.getElementById('menu-product-selection');
+
+  if (homeCard) {
+    homeCard.disabled = disabled;
+    homeCard.setAttribute('aria-disabled', String(disabled));
+  }
+
+  if (menuItem) {
+    menuItem.classList.toggle('is-disabled', disabled);
+    menuItem.setAttribute('aria-disabled', String(disabled));
+    menuItem.tabIndex = disabled ? -1 : 0;
+  }
+}
+
+updatePropertiesNavigationAvailability();
+mobilePropertiesNavigation.addEventListener('change', updatePropertiesNavigationAvailability);
+
+/* ═════════════════════════════════════════════════
+   View switching — Home ↔ App
+   ═════════════════════════════════════════════════ */
+
+/**
+ * Show either the home page or the app shell.
+ * @param {'home'|'app'} viewId
+ */
+function showView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById(viewId);
+  if (target) target.classList.add('active');
+
+  // Close mobile sidebar when navigating
+  closeMobileSidebar();
+}
+
+/**
+ * Called from home-page cards. Switch to the app view
+ * and activate the requested section.
+ * @param {string} sectionId
+ */
+function navigateTo(sectionId) {
+  if (sectionId === 'product-selection' && isPropertiesNavigationDisabled()) return;
+
+  showView('app');
+  showSection(sectionId, null);
+}
+
+function switchOverviewPage(pageNumber) {
+  const targetPage = document.getElementById(`overview-page-${pageNumber}`);
+  if (!targetPage) {
+    console.error(`Overview page could not be found: ${pageNumber}`);
+    return;
+  }
+
+  document.querySelectorAll('.overview-page').forEach(page => {
+    page.hidden = page !== targetPage;
+  });
+
+  document.querySelectorAll('[data-overview-footnote]').forEach(footnote => {
+    footnote.hidden = Number(footnote.dataset.overviewFootnote) !== pageNumber;
+  });
+
+  document.querySelectorAll('[data-overview-page]').forEach(button => {
+    const isActive = Number(button.dataset.overviewPage) === pageNumber;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-current', isActive ? 'page' : 'false');
+  });
+
+  const previousButton = document.querySelector('[data-overview-previous]');
+  const nextButton = document.querySelector('[data-overview-next]');
+  if (previousButton) previousButton.disabled = pageNumber === 1;
+  if (nextButton) nextButton.disabled = pageNumber === 2;
+}
+
+function switchManufacturingPage(pageNumber) {
+  const section = document.getElementById('properties-content');
+  const targetPage = section?.querySelector(`#manufacturing-page-${pageNumber}`);
+  if (!section || !targetPage) {
+    console.error(`Manufacturing process page could not be found: ${pageNumber}`);
+    return;
+  }
+
+  section.querySelectorAll('.manufacturing-page').forEach(page => {
+    page.hidden = page !== targetPage;
+  });
+  section.querySelectorAll('[data-manufacturing-footnote]').forEach(footnote => {
+    footnote.hidden = Number(footnote.dataset.manufacturingFootnote) !== pageNumber;
+  });
+  section.querySelectorAll('[data-manufacturing-page]').forEach(button => {
+    const isActive = Number(button.dataset.manufacturingPage) === pageNumber;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-current', isActive ? 'page' : 'false');
+  });
+
+  const previousButton = section.querySelector('[data-manufacturing-previous]');
+  const nextButton = section.querySelector('[data-manufacturing-next]');
+  if (previousButton) previousButton.disabled = pageNumber === 1;
+  if (nextButton) nextButton.disabled = pageNumber === section.querySelectorAll('.manufacturing-page').length;
+}
+
+function switchOverviewStressTab(button, panelId) {
+  const tabs = button.closest('.overview-stress-tabs');
+  const panel = tabs?.querySelector(`#${panelId}`);
+  if (!tabs || !panel) {
+    console.error(`Overview stress panel could not be found: ${panelId}`);
+    return;
+  }
+
+  tabs.querySelectorAll('[role="tab"]').forEach(tab => {
+    const isActive = tab === button;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+  tabs.querySelectorAll('.overview-stress-panel').forEach(stressPanel => {
+    const isActive = stressPanel === panel;
+    stressPanel.classList.toggle('active', isActive);
+    stressPanel.hidden = !isActive;
+  });
+}
+
+let manufacturingModalTrigger = null;
+let rheologyModalTrigger = null;
+let physicochemicalModalTrigger = null;
+
+function openRheologyPopup(trigger) {
+  const modal = document.getElementById('rheologyInfoModal');
+  const closeButton = modal?.querySelector('.rheology-popup-close');
+  const topic = trigger.dataset.rheologyTopic;
+  const selectedContent = modal?.querySelector(`[data-rheology-content="${topic}"]`);
+  if (!modal || !closeButton || !topic || !selectedContent) {
+    console.error('Rheology popup could not be found.');
+    return;
+  }
+
+  modal.querySelectorAll('[data-rheology-content]').forEach(content => {
+    content.hidden = content !== selectedContent;
+  });
+  rheologyModalTrigger = trigger;
+  openModal('rheologyInfoModal');
+  closeButton.focus();
+}
+
+function openPhysicochemicalPopup(trigger, playVideo = false) {
+  const modal = document.getElementById('physicochemicalInfoModal');
+  const closeButton = modal?.querySelector('.rheology-popup-close');
+  if (!modal || !closeButton) {
+    console.error('Physicochemical popup could not be found.');
+    return;
+  }
+
+  physicochemicalModalTrigger = trigger;
+  openModal('physicochemicalInfoModal');
+  closeButton.focus();
+
+  if (playVideo) {
+    const video = modal.querySelector('video');
+    if (!video) {
+      console.error('Water uptake assay video could not be found.');
+      return;
+    }
+
+    video.play().catch(error => {
+      if (error.name !== 'AbortError') {
+        console.error('Water uptake assay video could not be played.', error);
+      }
+    });
+  }
+}
+
+function openManufacturingPopup(panelId, trigger) {
+  const modal = document.getElementById('manufacturingInfoModal');
+  const panel = document.getElementById(panelId);
+  const tab = modal?.querySelector(`[aria-controls="${panelId}"]`);
+  if (!modal || !panel || !tab) {
+    console.error(`Manufacturing popup content could not be found: ${panelId}`);
+    return;
+  }
+
+  const topicGroup = tab.dataset.manufacturingGroup;
+  modal.querySelectorAll('.manufacturing-topic-tab').forEach(topicTab => {
+    topicTab.hidden = topicTab.dataset.manufacturingGroup !== topicGroup;
+  });
+  manufacturingModalTrigger = trigger;
+  switchManufacturingTopic(tab, panelId);
+  openModal('manufacturingInfoModal');
+  modal.querySelector('.manufacturing-modal-close')?.focus();
+}
+
+function switchManufacturingTopic(button, panelId) {
+  const modal = document.getElementById('manufacturingInfoModal');
+  if (!modal || !modal.querySelector(`#${panelId}`)) {
+    console.error(`Manufacturing topic panel could not be found: ${panelId}`);
+    return;
+  }
+
+  modal.querySelectorAll('.manufacturing-topic-tab').forEach(tab => {
+    const isActive = tab === button;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+  modal.querySelectorAll('.manufacturing-topic-panel').forEach(panel => {
+    panel.hidden = panel.id !== panelId;
+  });
+}
+
+function switchManufacturingDetail(button, panelId) {
+  const topicPanel = button.closest('.manufacturing-topic-panel');
+  if (!topicPanel || !topicPanel.querySelector(`#${panelId}`)) {
+    console.error(`Manufacturing detail panel could not be found: ${panelId}`);
+    return;
+  }
+
+  topicPanel.querySelectorAll('.manufacturing-subtab').forEach(tab => {
+    const isActive = tab === button;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+  topicPanel.querySelectorAll('.manufacturing-detail-panel').forEach(panel => {
+    panel.hidden = panel.id !== panelId;
+  });
+}
+
+
+/* ═════════════════════════════════════════════════
+   Section switching inside the App shell
+   ═════════════════════════════════════════════════ */
+
+/**
+ * Activate a content section and update sidebar state.
+ * @param {string} id       - section element ID
+ * @param {Event|null} event - originating click event (may be null)
+ */
+function showSection(id, event) {
+  if (id === 'product-selection' && isPropertiesNavigationDisabled()) return;
+  
+  // 1. Hide all content sections
+  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+
+  // 2. Show the target section
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  if (id === 'FillerSelection' && typeof syncFaceMarkerSize === 'function') {
+    syncFaceMarkerSize();
+  }
+
+  // 3. Update sidebar menu items (active state + icon swap)
+  updateSidebarMenuItems(id);
+
+  // 4. Update timeline items
+  updateTimeline(id, event);
+
+  // 5. Show/hide the Rheology timeline
+  const rheologyTimeline = document.getElementById('rheology-timeline');
+  const productSelection = document.getElementById('product-selection');
+  const rheologyIds = ['mechanical', 'rheology-content', 'viscoelasticity', 'physiocochemical-features', 'properties-content'];
+  // if (rheologyTimeline) {
+  //   rheologyTimeline.style.display = rheologyIds.includes(id) ? 'flex' : 'none';
+  // }
+if (id === "product-selection") {
+  document.querySelector('#sidebar').classList.remove('sidebar-active');
+}else{
+  document.querySelector('#sidebar').classList.add('sidebar-active');
+}
+  // 6. Section-specific side-effects
+  if (id === 'graphContainer') {
+    // Ensure chart section is visible and charts render properly
+    setTimeout(() => {
+      if (window.myChartInstance) window.myChartInstance.resize();
+      if (window.liftChartInstance) window.liftChartInstance.resize();
+      if (window.extrusionChartInstance) window.extrusionChartInstance.resize();
+    }, 100);
+  }
+
+  // 7. Close mobile sidebar after navigating
+  closeMobileSidebar();
+}
+
+/**
+ * Update sidebar menu-item active states and icon images.
+ * @param {string} activeSectionId
+ */
+function updateSidebarMenuItems(activeSectionId) {
+  const menuMap = {
+    mechanical: 'mechanical',
+    'rheology-content': 'mechanical',
+    viscoelasticity: 'mechanical',
+    'physiocochemical-features': 'mechanical',
+    'properties-content': 'mechanical',
+    FillerSelection: 'FillerSelection',
+    'product-selection': 'product-selection',
+    graphContainer: 'product-selection',
+  };
+
+  const activeMenu = menuMap[activeSectionId] || activeSectionId;
+
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const section = item.dataset.section;
+    const img = item.querySelector('img');
+    const isActive = section === activeMenu;
+
+    item.classList.toggle('active', isActive);
+    if (img) {
+      img.src = isActive
+        ? (item.dataset.activeIcon || img.src)
+        : (item.dataset.inactiveIcon || img.src);
+    }
+  });
+}
+
+/**
+ * Update which timeline item is highlighted.
+ * @param {string} id
+ * @param {Event|null} event
+ */
+function updateTimeline(id, event) {
+  document.querySelectorAll('.timeline-item').forEach(t => t.classList.remove('active'));
+
+  // If user clicked a timeline item directly, use that
+  let itemToActivate = null;
+  if (event) {
+    itemToActivate = event.target.closest('.timeline-item');
+  }
+
+  // Otherwise match by data-section attribute
+  if (!itemToActivate) {
+    itemToActivate = document.querySelector(`.timeline-item[data-section="${id}"]`);
+  }
+
+  if (itemToActivate) itemToActivate.classList.add('active');
+}
+
+
+/* ═════════════════════════════════════════════════
+   Tab helpers
+   ═════════════════════════════════════════════════ */
+
+/**
+ * Switch tabs within the mechanical stress section (Shear / Compression).
+ * @param {HTMLElement} btn
+ * @param {string} tabId - 'shear' | 'compression'
+ */
+function switchTab(btn, tabId) {
+  // Button states
+  btn.closest('.tabs').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Panel visibility
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('tab-' + tabId);
+  if (panel) panel.classList.add('active');
+}
+
+/**
+ * Switch top-level filler property tabs (Lift / Extrusion / Tissue).
+ * @param {HTMLElement} btn
+ * @param {string} tabId - 'lift' | 'extrusion' | 'tissue'
+ */
+function switchFillerTab(btn, tabId) {
+  document.querySelectorAll('.filler-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('#fillerTabsContent .tab-pane').forEach(p => p.classList.remove('active'));
+  const pane = document.getElementById('pane-' + tabId);
+  if (pane) pane.classList.add('active');
+  document.querySelector('.filler-body').style.display = "none";
+  document.getElementById('GoBack').style.display = "block";
+  // Re-render / resize charts when their tab becomes visible
+  // (canvas has 0 dimensions while the pane is hidden)
+  setTimeout(() => {
+    if (tabId === 'lift') {
+      if (typeof liftChart !== 'undefined' && liftChart) {
+        liftChart.resize();
+      } else if (typeof renderLiftCapacityChart === 'function' && typeof selectedProducts !== 'undefined' && selectedProducts.length > 0) {
+        renderLiftCapacityChart(selectedProducts);
+      }
+    } else if (tabId === 'extrusion') {
+      if (typeof ExtrusionChart !== 'undefined' && ExtrusionChart) {
+        ExtrusionChart.resize();
+      }
+    }
+  }, 50);
+}
+
+/**
+ * Toggle between Graph and Table view.
+ * @param {'graph'|'table'} mode
+ * @param {boolean} [inFullscreen=false]
+ */
+function switchGraphTable(mode, inFullscreen = false) {
+  const graphEl = document.getElementById('scattergraphContainer');
+  const tableEl = document.getElementById('tableContainer');
+  const showBtn = document.getElementById('showGraph');
+  const tableBtn = document.getElementById('showTable');
+  const fsGraphBtn = document.getElementById('fsShowGraph');
+  const fsTableBtn = document.getElementById('fsShowTable');
+
+  const showGraph = mode === 'graph';
+
+  if (graphEl) graphEl.style.display = showGraph ? 'block' : 'none';
+  if (tableEl) tableEl.style.display = showGraph ? 'none' : 'block';
+
+  // Normal toggle buttons
+  if (showBtn) showBtn.classList.toggle('active', showGraph);
+  if (tableBtn) tableBtn.classList.toggle('active', !showGraph);
+
+  // Fullscreen toggle buttons
+  if (fsGraphBtn) fsGraphBtn.classList.toggle('active', showGraph);
+  if (fsTableBtn) fsTableBtn.classList.toggle('active', !showGraph);
+
+  if (showGraph && window.myChartInstance) {
+    setTimeout(() => window.myChartInstance.resize(), 50);
+  }
+}
+
+
+/* ═════════════════════════════════════════════════
+   Modal helpers
+   ═════════════════════════════════════════════════ */
+
+/**
+ * Open a modal overlay by ID.
+ * @param {string} modalId
+ */
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  
+}
+
+/**
+ * Close a modal overlay by ID.
+ * @param {string} modalId
+ */
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.remove('open');
+  if (modalId === 'physicochemicalInfoModal') {
+    modal?.querySelector('video')?.pause();
+  }
+  // Only remove modal-open if no other modals are open
+  const anyOpen = document.querySelector('.modal-overlay.open, .popup.open');
+  if (!anyOpen) document.body.classList.remove('modal-open');
+
+  if (modalId === 'manufacturingInfoModal' && manufacturingModalTrigger instanceof HTMLElement) {
+    manufacturingModalTrigger.focus();
+    manufacturingModalTrigger = null;
+  }
+  if (modalId === 'rheologyInfoModal' && rheologyModalTrigger instanceof HTMLElement) {
+    rheologyModalTrigger.focus();
+    rheologyModalTrigger = null;
+  }
+  if (modalId === 'physicochemicalInfoModal' && physicochemicalModalTrigger instanceof HTMLElement) {
+    physicochemicalModalTrigger.focus();
+    physicochemicalModalTrigger = null;
+  }
+}
+
+// Close modal when clicking backdrop
+document.addEventListener('click', function (e) {
+  if (e.target.classList.contains('modal-overlay')) {
+    closeModal(e.target.id);
+  }
+});
+
+// Keyboard escape to close modals
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+    closeFullscreen();
+    return;
+  }
+
+  const modal = document.getElementById('manufacturingInfoModal');
+  if (!modal?.classList.contains('open')) return;
+
+  if (e.key === 'Tab') {
+    const focusable = Array.from(modal.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.offsetParent !== null);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last?.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first?.focus();
+    }
+    return;
+  }
+
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    const tablist = e.target.closest('.manufacturing-topic-tabs, .manufacturing-subtabs');
+    if (!tablist) return;
+    const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    const currentIndex = tabs.indexOf(e.target);
+    if (currentIndex < 0) return;
+
+    e.preventDefault();
+    const direction = e.key === 'ArrowRight' ? 1 : -1;
+    const nextTab = tabs[(currentIndex + direction + tabs.length) % tabs.length];
+    nextTab.focus();
+    nextTab.click();
+  }
+});
+
+
+/* ═════════════════════════════════════════════════
+   Clear All confirm
+   ═════════════════════════════════════════════════ */
+
+function confirmClearAll() {
+  // Delegate to product.js clearAll logic
+  if (typeof clearAll === 'function') clearAll();
+  closeModal('confirmClearAllModal');
+}
+
+
+/* ═════════════════════════════════════════════════
+   Fullscreen
+   ═════════════════════════════════════════════════ */
+
+function openFullscreen() {
+  const modal = document.getElementById('fullscreenModal');
+  if (!modal) return;
+
+  // Clone the chart canvas into the fullscreen area
+  const content = document.getElementById('fullscreenContent');
+  if (content) {
+    content.innerHTML = '<canvas id="fullscreenChart" style="width:100%;height:100%;"></canvas>';
+  }
+  modal.classList.add('open');
+  // Re-render chart in fullscreen if needed
+  if (typeof renderFullscreenChart === 'function') renderFullscreenChart();
+}
+
+function closeFullscreen() {
+  const modal = document.getElementById('fullscreenModal');
+  if (modal) modal.classList.remove('open');
+}
+
+
+/* ═════════════════════════════════════════════════
+   Popup (proceed confirmation)
+   ═════════════════════════════════════════════════ */
+
+function closePopup() {
+  closeModal('confirmPopup');
+}
+
+function continueAction() {
+  closeModal('confirmPopup');
+  showSection('graphContainer', null);
+
+  // Show the products bar when entering graph view
+  const bar = document.getElementById('productsBar');
+  if (bar) bar.style.display = 'none';
+
+  // Show Go Back button
+  const goBack = document.getElementById('GoBack');
+  goBack.addEventListener('click', () => {
+    showSection('graphContainer', null);
+    // Hide the products bar when going back to product selection
+    if (goBack) goBack.style.display = 'none';
+    document.querySelector('.filler-body').style.display = "block";
+    document.querySelectorAll('#fillerTabsContent .tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.filler-tab-btn').forEach(b => b.classList.remove('active'));
+  });
+  // if (goBack) goBack.style.display = 'flex';
+
+  // Render charts — this function is defined in product.js
+  if (typeof renderChartsForSelected === 'function') {
+    renderChartsForSelected();
+  }
+}
+
+function onProceed() {
+  openModal('confirmPopup');
+}
+
+function confirmProducts() {
+  continueAction();
+}
+
+
+/* ═════════════════════════════════════════════════
+   Products bar (sticky, expandable)
+   ═════════════════════════════════════════════════ */
+
+function toggleProductsBar() {
+  const content = document.getElementById('productsBarContent');
+  const arrow = document.getElementById('productsBarArrow');
+  if (!content) return;
+  const isOpen = content.classList.toggle('open');
+  if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+}
+
+
+/* ═════════════════════════════════════════════════
+   Tissue Integration — week / type switches
+   ═════════════════════════════════════════════════ */
+
+let currentTissueWeek = 'Week1';
+let currentTissueType = 'all';
+
+function switchTissueWeek(btn, week) {
+  document.querySelectorAll('.tissue-week-btns .tissue-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTissueWeek = week;
+  if (typeof renderTissueImages === 'function') {
+    renderTissueImages(currentTissueWeek, currentTissueType);
+  }
+}
+
+function switchTissueType(btn, type) {
+  document.querySelectorAll('.tissue-type-btns .tissue-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTissueType = type;
+  if (typeof renderTissueImages === 'function') {
+    renderTissueImages(currentTissueWeek, currentTissueType);
+  }
+}
+
+
+/* ═════════════════════════════════════════════════
+   Filler Selection — body part interaction
+   ═════════════════════════════════════════════════ */
+
+/**
+ * Called when a body-part button is clicked.
+ * Updates the face marker overlay and the large area image.
+ * @param {HTMLElement} btn
+ */
+function selectBodyPart(btn) {
+  // Update active state
+  document.querySelectorAll('.body-part-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Update marker image
+  const markerImg = document.getElementById('image-marker');
+  if (markerImg && btn.dataset.marker) {
+    markerImg.src = btn.dataset.marker;
+    markerImg.style.visibility = 'visible';
+  }
+
+  // Update the large area image shown to the right
+  const areaImg = document.getElementById('selected-area-img');
+  if (areaImg && btn.dataset.areaImg) {
+    areaImg.src = btn.dataset.areaImg;
+  }
+}
+
+// Initialise with forehead on load
+document.addEventListener('DOMContentLoaded', () => {
+  const defaultPart = document.querySelector('.body-part-btn[data-img="1"]');
+  if (defaultPart) selectBodyPart(defaultPart);
+});
+
+
+/* ═════════════════════════════════════════════════
+   Mobile sidebar toggle
+   ═════════════════════════════════════════════════ */
+
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebar = document.getElementById('sidebar');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+const sidebarClose = document.getElementById('sidebarClose');
+
+if (sidebarToggle) {
+  sidebarToggle.addEventListener('click', () => {
+    const isOpen = sidebar.classList.contains('open');
+    if (isOpen) closeMobileSidebar();
+    else openMobileSidebar();
+    
+      document.getElementById("sidebarToggle").classList.remove("active");
+  
+  });
+}
+if (sidebarClose) sidebarClose.addEventListener('click', closeMobileSidebar);
+if (sidebarBackdrop) {
+  sidebarBackdrop.addEventListener('click', closeMobileSidebar);
+  //  document.getElementById("sidebarToggle").classList.add("active");
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && sidebar?.classList.contains('open')) closeMobileSidebar();
+});
+
+function openMobileSidebar() {
+  if (sidebar) sidebar.classList.add('open');
+  if (sidebarBackdrop) sidebarBackdrop.classList.add('open');
+  if (sidebarToggle) {
+    sidebarToggle.setAttribute('aria-expanded', 'true');
+    sidebarToggle.setAttribute('aria-label', 'Close navigation menu');
+  }
+  document.body.classList.add('sidebar-open');
+}
+
+function closeMobileSidebar() {
+  if (sidebar) sidebar.classList.remove('open');
+  if (sidebarBackdrop) sidebarBackdrop.classList.remove('open');
+  if (sidebarToggle) {
+    sidebarToggle.setAttribute('aria-expanded', 'false');
+    sidebarToggle.setAttribute('aria-label', 'Open navigation menu');
+  }
+  document.body.classList.remove('sidebar-open');
+   document.getElementById("sidebarToggle").classList.add("active");
+}
+
+/* ═════════════════════════════════════════════════
+   Initialisation on page load
+   ═════════════════════════════════════════════════ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Show the home view by default
+  showView('app');
+
+  // Default section inside app shell
+  const firstTimeline = document.querySelector('.timeline-item');
+  if (firstTimeline) firstTimeline.classList.add('active');
+
+  // Make rheology timeline visible by default
+  const rheologyTimeline = document.getElementById('rheology-timeline');
+  if (rheologyTimeline) rheologyTimeline.style.display = 'flex';
+});
