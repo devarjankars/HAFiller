@@ -182,13 +182,21 @@ img {
 }
 
 .home-footer-legal {
-  max-width: 54%;
+  max-width: 70%;
   font-size: 12px;
   line-height: 1.35;
+
 }
 
 .home-footer-legal p + p {
-  margin-top: 1rem;
+
+  font-size: 14px;
+}
+
+
+.home-footer-legal > p {
+  margin-top: 1.25rem;
+  font-size: 16px;
 }
 
 .home-footer-title {
@@ -675,6 +683,7 @@ img {
 
 .rheology-prompt {
   flex: 0 0 auto;
+  font-weight: 600;
   margin-bottom: 0.85rem;
 font-size: clamp(1rem, 2vw, 1.5rem)
 }
@@ -3505,6 +3514,7 @@ position: fixed;
   transition: transform 0.2s, box-shadow 0.2s;
   text-decoration: none;
   color: var(--color-text-main);
+  text-align: left;
 }
 
 .home-card:hover {
@@ -4033,6 +4043,10 @@ position: fixed;
   border-radius: 18px;
   padding: 30px 38px;
   display: flex;
+  align-items: center;
   gap: 1.5rem;
   margin-bottom: 3rem;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 400;
 }

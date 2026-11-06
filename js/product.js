@@ -5796,6 +5796,55 @@ const brands = data.map((obj) => {
   return true;
 });
 
+const volbella30Name = 'Juvéderm Volbella with Lidocaine/XC (TSK 30G1/2")';
+const volbella32Name = 'Juvéderm Volbella with Lidocaine/XC (TSK 32G1/2")';
+const volbellaDisplayName = "Juvéderm Volbella with Lidocaine/XC";
+
+function isVolbellaVariant(product) {
+  return product.name === volbella30Name || product.name === volbella32Name;
+}
+
+function getProductsWithSingleVolbellaEntry(products) {
+  let hasVolbella = false;
+
+  return products.filter((product) => {
+    if (!isVolbellaVariant(product)) return true;
+    if (hasVolbella) return false;
+
+    hasVolbella = true;
+    return true;
+  });
+}
+
+function getProductPickerEntries(brand) {
+  const entries = [];
+
+  brand.products.forEach((product) => {
+    if (product.Name === volbella32Name) return;
+
+    entries.push({
+      product,
+      displayName: product.Name === volbella30Name
+        ? "Juvéderm Volbella with Lidocaine/XC"
+        : product.Name,
+      selectionNames: product.Name === volbella30Name
+        ? [volbella30Name, volbella32Name]
+        : [product.Name],
+    });
+  });
+
+  return entries;
+}
+
+function getBrandSelectedOptionCount(brand) {
+  const brandData = brands.find((item) => item.brand === brand);
+  if (!brandData || !state.selected[brand]) return 0;
+
+  return getProductPickerEntries(brandData)
+    .filter((entry) => entry.selectionNames.some((name) => state.selected[brand].has(name)))
+    .length;
+}
+
 // State store
 const state = {
   activeBrand: "All",
@@ -5856,7 +5905,13 @@ function loadSavedLists() {
         typeof productName === "string" &&
         brand.products.some((product) => product.Name === productName)
       );
-      if (validProducts.length > 0) selection[brand.brand] = [...new Set(validProducts)];
+      const normalizedProducts = new Set(validProducts);
+      getProductPickerEntries(brand).forEach((entry) => {
+        if (entry.selectionNames.some((productName) => normalizedProducts.has(productName))) {
+          entry.selectionNames.forEach((productName) => normalizedProducts.add(productName));
+        }
+      });
+      if (normalizedProducts.size > 0) selection[brand.brand] = [...normalizedProducts];
     });
 
     if (Object.keys(selection).length === 0) return lists;
@@ -6122,8 +6177,8 @@ function makePill(name, active = false) {
   // Counts
   const brandObj = brands.find((b) => b.brand === name);
   if (brandObj) {
-    const total = brandObj.products.length;
-    const selectedCount = state.selected[name].size;
+    const total = getProductPickerEntries(brandObj).length;
+    const selectedCount = getBrandSelectedOptionCount(name);
 
     const countSpan = document.createElement("span");
     countSpan.textContent = active ? `${selectedCount}/${total}` : `${total}`;
@@ -6200,8 +6255,9 @@ function renderSections() {
 
     // Select all button with icon
     const btn = document.createElement("div");
-    const total = b.products.length;
-    const selectedCount = state.selected[b.brand].size;
+    const pickerEntries = getProductPickerEntries(b);
+    const total = pickerEntries.length;
+    const selectedCount = getBrandSelectedOptionCount(b.brand);
     const allSelected = selectedCount === total && total > 0;
     btn.className = `select-all ${allSelected ? "active" : ""}`;
 
@@ -6241,19 +6297,18 @@ function renderSections() {
     const plusIcon = "<svg width=\"18\" height=\"18\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"18\" height=\"18\" rx=\"9\" fill=\"#C5C5C5\" fill-opacity=\"0.3\"/>\n  <path d=\"M2.80273 9.40221V8.5382H8.55288V2.54971H9.44668V8.5382H15.1968V9.40221H9.44668V15.4503H8.55288V9.40221H2.80273Z\" fill=\"#475061\"/>\n</svg>";
     const crossIcon = "<svg width=\"18\" height=\"18\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"17.886\" height=\"17.886\" rx=\"8.94301\" fill=\"white\" fill-opacity=\"0.3\"/>\n  <path d=\"M4.84545 13.6094L4.2345 12.9984L8.30046 8.93245L4.06596 4.69795L4.69798 4.06594L8.93248 8.30044L12.9984 4.23448L13.6094 4.84542L9.54343 8.91139L13.8201 13.188L13.188 13.82L8.91141 9.5434L4.84545 13.6094Z\" fill=\"white\"/>\n</svg>";
     grid.className = "products";
-    b.products.forEach((prod) => {
-      const name = prod.Name; // use the Name field
-      const isSelected = state.selected[b.brand].has(name);
+    pickerEntries.forEach(({ displayName, selectionNames }) => {
+      const isSelected = selectionNames.some((productName) => state.selected[b.brand].has(productName));
 
       const pill = document.createElement("div");
       pill.className = "pill" + (isSelected ? " selected" : "");
-      pill.innerHTML = `<span>${name}</span>
+      pill.innerHTML = `<span>${displayName}</span>
     <div class="icon">${isSelected ? crossIcon : plusIcon}</div>`;
 
 
 
       pill.addEventListener("click", () => {
-        toggleProduct(b.brand, name);
+        toggleProductGroup(b.brand, selectionNames);
         renderAll();
       });
 
@@ -6304,6 +6359,18 @@ function renderSections() {
 function toggleProduct(brand, prod) {
   const set = state.selected[brand];
   set.has(prod) ? set.delete(prod) : set.add(prod);
+
+  updateClearAllButton();
+  updateSelectedCountDisplay();
+}
+
+function toggleProductGroup(brand, productNames) {
+  const set = state.selected[brand];
+  if (productNames.some((name) => set.has(name))) {
+    productNames.forEach((name) => set.delete(name));
+  } else {
+    productNames.forEach((name) => set.add(name));
+  }
 
   updateClearAllButton();
   updateSelectedCountDisplay();
@@ -6383,7 +6450,7 @@ function renderLiftCapacityChart(selectedProducts) {
 
 
   // datasets for  selected productsd
-  const datasets = selectedProducts.map((prod, index) => {
+  const datasets = getProductsWithSingleVolbellaEntry(selectedProducts).map((prod, index) => {
     const dayMap = {};
     prod.LiftCapacity.forEach(lc => {
       dayMap[lc.Day] = lc.Value === "NA" ? null : parseFloat(lc.Value);
@@ -6395,7 +6462,7 @@ function renderLiftCapacityChart(selectedProducts) {
     }
 
     return {
-      label: prod.name,
+      label: prod.graphName || prod.name,
       data: prod.LiftCapacity
         .filter(lc => lc.Value !== "NA")
         .map(lc => ({
@@ -6524,21 +6591,7 @@ function renderExtrusionChart(selectedProducts) {
   // Now build arrays
   const labels = validProducts.map(prod => prod.name);
   const extrusionForces = validProducts.map(prod => parseFloat(prod.ExtrusionForce));
-  const barColors = selectedProducts.map(p => p.BrandColor || "#000000");
-
-  if (labels.includes('Juvéderm Volbella')) {
-
-
-    const volbella = selectedProducts.find(
-      p => p.name === 'Juvéderm Volbella'
-    );
-
-    extrusionForces.push(28);
-    labels.push('Juvéderm Volbella');
-
-    barColors.push(volbella?.BrandColor || "#000000"); //
-  }
-
+  const barColors = validProducts.map(p => p.BrandColor || "#000000");
 
 
 
@@ -6671,7 +6724,7 @@ function renderTissueIntefration(selectedProducts) {
   const container = document.getElementById("tissueImageContainer");
   container.innerHTML = "";
 
-  selectedProducts.forEach(product => {
+  getProductsWithSingleVolbellaEntry(selectedProducts).forEach(product => {
 
     // Find the week data
     const weekData = product.TissueIntegration.find(w => w.week === activeWeek);
@@ -6699,7 +6752,7 @@ function renderTissueIntefration(selectedProducts) {
 
         <div class="tissue-name">
             <span class="tissue-dot" style="background:${color}"></span>
-            ${product.name}
+            ${product.graphName || product.name}
         </div>
     </div>
             `;
@@ -6876,6 +6929,9 @@ function renderChartsForSelected() {
           selectedProducts.push({
             brand,
             name: normalizeLabel(p.Name),
+            graphName: isVolbellaVariant({ name: normalizeLabel(p.Name) })
+              ? volbellaDisplayName
+              : normalizeLabel(p.Name),
             x: p.Elasticity,
             y: p.Cohesivity,
             waterupTake: p.WaterUptake,
@@ -6967,7 +7023,7 @@ function renderChartsForSelected() {
   }
 
   // Filter out products with invalid x or y values
-  const validProducts = selectedProducts.filter(p => {
+  const validProducts = getProductsWithSingleVolbellaEntry(selectedProducts).filter(p => {
     const xNum = Number(p.x);
     const yNum = Number(p.y);
     // Filter out products with "NA" string values or NaN results
@@ -7160,7 +7216,7 @@ function renderChartsForSelected() {
               return {
                 x: p.x,
                 y: p.y,
-                label: p.name,
+                label: p.graphName,
                 BrandColor: p.BrandColor,
                 pointStyle: shapes[i % shapes.length],
                 groupAngle: finalAngle,
@@ -7379,16 +7435,16 @@ function renderSelectedProducts() {
       // PRODUCTS GRID
       const grid = document.createElement("div");
       grid.className = "products";
-      b.products.forEach((name) => {
+      getProductPickerEntries(b).forEach(({ displayName, selectionNames }) => {
         const pill = document.createElement("div");
-        const isSelected = state.selected[b.brand].has(name);
+        const isSelected = selectionNames.some((productName) => state.selected[b.brand].has(productName));
         pill.className = "pill" + (isSelected ? " selected" : "");
-        pill.innerHTML = `<span>${name}</span>
+        pill.innerHTML = `<span>${displayName}</span>
         <i class="fa-solid ${isSelected ? "fa-xmark" : "fa-plus"}"></i>        
       `;
 
         pill.addEventListener("click", () => {
-          toggleProduct(b.brand, name);
+          toggleProductGroup(b.brand, selectionNames);
           renderSelectedProducts();
         });
         grid.append(pill);
@@ -7444,7 +7500,7 @@ function renderSelectedProducts() {
 });
 
 function getTotalSelectedCount() {
-  return Object.values(state.selected).reduce((sum, set) => sum + set.size, 0);
+  return brands.reduce((sum, brand) => sum + getBrandSelectedOptionCount(brand.brand), 0);
 }
 
 function updateClearAllButton() {
@@ -7463,7 +7519,7 @@ function updateSelectedCountDisplay() {
 const brandCountEl = document.getElementById('brandCount');
 if (brandCountEl) brandCountEl.textContent = brands.length;
 
-const totalProducts = brands.reduce((acc, b) => acc + b.products.length, 0);
+const totalProducts = brands.reduce((acc, b) => acc + getProductPickerEntries(b).length, 0);
 const productCountEl = document.getElementById('productCount');
 if (productCountEl) productCountEl.textContent = totalProducts;
 
