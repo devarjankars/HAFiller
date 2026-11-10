@@ -808,7 +808,7 @@ font-size: clamp(1rem, 2vw, 1.5rem);
 
 .rheology-popup-header {
   padding: 1rem 3.5rem 0.8rem 1.5rem;
-  border-bottom: 1px solid #ececec;
+  /* border-bottom: 1px solid #ececec; */
 }
 
 .rheology-popup-header h2 {
@@ -4229,16 +4229,31 @@ position: fixed;
 }
 
 
- .mobile-mfg-cards{
+ /* .mobile-mfg-cards{
         display:none;
     }
 
     .desktop-mfg-cards{
         display:grid;
-    }
+    } */
 .viscoelasticity-visual > img.mobile_img{
   display:none;
 }
 .viscoelasticity-visual > img.desktop_img{
   display:block;
+}
+
+  .viscoelasticity-stages>img.mobile_img {
+    display: none;
+  }
+
+  .viscoelasticity-stages>img.desktop_img {
+    display: block;
+  }
+
+  .viscoelasticity-stage-blockimage {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-direction: column;
 }
