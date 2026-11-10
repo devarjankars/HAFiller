@@ -2,12 +2,31 @@
 /* All main responsive rules are in custom.css.
    Use this file for fine-tuned per-breakpoint tweaks only. */
 /* ── Responsive ─────────────────────────────────────── */
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 1100px) {
 
-    html,
-    body {
+    html {
+        height: auto;
+        min-height: 100%;
         --sidebar-width: 220px;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    body {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+    }
+
+    #app.active,
+    .mainContainer,
+    .main-content {
+        min-width: 0;
+    }
+
+    .content-section {
+        padding-right: clamp(1rem, 2.5vw, 2rem);
+        padding-left: clamp(1rem, 2.5vw, 2rem);
     }
 
     #properties-content.active {
@@ -40,7 +59,32 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    :root {
+        --mobile-header-height: 80px;
+    }
+
+    #nav-product-selection,
+    #menu-product-selection,
+    .sidebar-menu > .sidebar-section:last-child,
+    #product-selection,
+    #graphContainer {
+        display: none !important;
+    }
+
+    .sideBarmobileheader {
+        display: flex;
+        height: var(--mobile-header-height);
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .sm-logo img {
+        width: auto;
+        max-width: 45vw;
+        height: 64px;
+    }
+
     #home {
         height: 100vh;
         height: 100svh;
@@ -125,6 +169,12 @@
         margin: 0;
     }
 
+    .home-footer-legal > p {
+        margin-top: 0.35rem;
+        font-size: 9px;
+        line-height: 1.25;
+    }
+
     .heroImg {
         width: auto;
         height: 100%;
@@ -132,28 +182,30 @@
 
     .home-footer {
         gap: 0.5rem;
-        padding: 0 1rem 0.75rem;
+        padding: 0 1rem 0.55rem;
     }
 
     .home-footer-legal {
-        max-width: 58%;
+        max-width: 70%;
         font-size: 9px;
     }
 
     .home-footer-legal p + p {
         margin-top: 0.5rem;
+        font-size: 8px;
     }
 
     .home-footer-title {
-        max-width: 40%;
+        max-width: 30%;
         padding-bottom: 0.25rem;
-        font-size: 0.9rem;
+        font-size: 11px;
     }
 
     #mechanical.active {
         gap: 1rem;
-        min-height: 0;
-        overflow: hidden;
+        min-height: calc(100svh - var(--mobile-header-height));
+        height: auto;
+        overflow: visible;
     }
 
     #mechanical > h1 {
@@ -162,9 +214,9 @@
     }
 
     .overview-page-content {
-        flex: 1 1 0;
-        min-height: 0;
-        overflow-y: auto;
+        flex: 0 0 auto;
+        min-height: auto;
+        overflow: visible;
     }
 
     .overview-page {
@@ -234,7 +286,7 @@
         display: flex;
         flex: 0 0 auto;
         flex-direction: column;
-        margin-top: auto;
+        margin-top: 0.75rem;
     }
 
     .overview-footnote {
@@ -349,12 +401,12 @@
     }
 
     #product-selection {
-        display: none !important;
+        min-height: calc(100svh - var(--mobile-header-height));
+        height: auto;
+        grid-template-rows: auto auto auto minmax(240px, 1fr) auto;
+        padding: 1rem;
     }
-    /* Show hamburger, hide sidebar by default */
-    .sidebar-menu .sidebar-section:last-child {
-        display: none;
-    }
+
     .sidebar-toggle.active {
         /* display: block; */
         opacity: 1;
@@ -366,19 +418,21 @@
     .sidebar {
         position: fixed;
         left: 0;
-        top: 103px;
+        top: var(--mobile-header-height);
         z-index: 450;
         transform: translateX(-110%);
-        height: calc(100vh - 103px);
-        width: 100%;
-        border-radius: 0% ;
-        padding:0 !important; 
-        border: none;
-        
+        height: calc(100vh - var(--mobile-header-height));
+        height: calc(100svh - var(--mobile-header-height));
+        width: min(88vw, 360px);
+        border-radius: 0 12px 12px 0;
+        padding: 1rem 0 !important;
+        border: 1px solid var(--color-brand-border);
     }
-  .sidebar.open .sidebar-footer {
-    display: none;
-}
+
+    .sidebar.open .sidebar-footer {
+        display: block;
+    }
+
     .sidebar.open {
         transform: translateX(0);
     }
@@ -661,7 +715,7 @@
     #FillerSelection.active {
         display: block !important;
         height: auto !important;
-        min-height: calc(100vh - 90px);
+        min-height: calc(100svh - var(--mobile-header-height));
         padding: 0 12px 20px;
     }
 
@@ -862,6 +916,97 @@
         font-size: 8px;
         line-height: 1.3;
     }
+
+    #app.active {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100svh;
+    }
+
+    .mainContainer {
+        height: auto !important;
+        min-height: 0;
+        flex: 1 0 auto;
+        flex-direction: column;
+        padding: 0 !important;
+    }
+
+    .main-content {
+        width: 100%;
+        height: auto;
+        min-height: calc(100svh - var(--mobile-header-height));
+        overflow: visible;
+    }
+
+    .content-section.active {
+        min-height: calc(100svh - var(--mobile-header-height));
+        height: auto;
+        overflow: visible;
+    }
+
+    #mechanical.active,
+    #rheology-content.active,
+    #viscoelasticity.active,
+    #physiocochemical-features.active,
+    #properties-content.active {
+        min-height: calc(100svh - var(--mobile-header-height));
+        overflow: visible;
+    }
+
+    #graphContainer.active {
+        display: block;
+        min-height: calc(100svh - var(--mobile-header-height));
+        padding-bottom: 1.25rem;
+    }
+
+    .product-layout {
+        min-height: 0;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow: visible;
+    }
+
+    .product-list-col {
+        width: 100%;
+        min-width: 0;
+        max-height: 35vh;
+        overflow-y: auto;
+    }
+
+    .brand-detail-col {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .fixed-footer {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 0;
+    }
+
+    .fixed-footer .logo-area {
+        display: none;
+    }
+
+    .fixed-footer .disclaimer {
+        width: 100%;
+        padding: 0;
+        font-size: 10px;
+        text-align: left;
+    }
+
+    .fixed-footer .btn-primary {
+        margin-left: auto;
+    }
+
+    #scattergraphContainer {
+        height: clamp(260px, 52svh, 440px);
+    }
+
+    .sideBarmobileheader {
+        flex: 0 0 auto;
+    }
 }
 
 @media (max-width: 480px) {
@@ -879,17 +1024,23 @@
     }
 
     .home-footer-legal {
-        font-size: clamp(5px, 2.1vw, 8px);
+        font-size: 8px;
         line-height: 1.15;
+    }
+
+    .home-footer-legal > p {
+        font-size: 8px;
+        line-height: 1.2;
     }
 
     .home-footer-legal p + p {
         margin-top: 0.35rem;
+        font-size: 7px;
     }
 
     .home-footer-title {
         padding-bottom: 0;
-        font-size: clamp(6px, 2.6vw, 10px);
+        font-size: 9px;
         line-height: 1.1;
     }
 
@@ -1028,5 +1179,61 @@
     .tab-btn {
         padding: 0.4rem 0.9rem;
         font-size: 13px;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    #home main > div:first-child {
+        top: 50%;
+        right: auto;
+        left: clamp(1rem, 4vw, 3rem);
+        width: min(36vw, 360px);
+        transform: translateY(-50%);
+    }
+
+    .home-hero-picture {
+        height: 82svh;
+    }
+
+    #home .home-card {
+        min-height: 42px;
+    }
+
+    #home .home-card p {
+        font-size: clamp(0.65rem, 1.7vw, 0.9rem);
+    }
+}
+
+@media (orientation: landscape) and (max-width: 950px) {
+    .orientation-lock {
+        display: flex;
+    }
+
+    .orientation-lock__copy--phone {
+        display: block;
+    }
+
+    body > :not(.orientation-lock) {
+        visibility: hidden;
+    }
+}
+
+@media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
+    .orientation-lock {
+        display: flex;
+    }
+
+    .orientation-lock__device--phone,
+    .orientation-lock__copy--phone {
+        display: none;
+    }
+
+    .orientation-lock__device--tablet,
+    .orientation-lock__copy--tablet {
+        display: block;
+    }
+
+    body > :not(.orientation-lock) {
+        visibility: hidden;
     }
 }
