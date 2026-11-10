@@ -530,7 +530,7 @@
           <div class="manufacturing-page" id="manufacturing-page-2" hidden>
             <h1>Variations in Manufacturing Processes Yield Distinct HA Dermal Filler Products<sup>3</sup></h1>
 
-            <div class="mfg-cards desktop-mfg-cards">
+            <div class="mfg-cards ">
               <article class="mfg-card">
                 <img src="./assets/images/HAConcentration.png" alt="Illustration of HA concentration increasing" />
                 <div class="mfg-card-content">
@@ -550,7 +550,7 @@
               </article>
             </div>
 
-            <div class="mfg-cards mobile-mfg-cards">
+            <!-- <div class="mfg-cards mobile-mfg-cards">
               <article class="mfg-card">
                 <img src="./assets/images/HAConcentration.png" alt="Illustration of HA concentration increasing" />
                 <div class="mfg-card-content">
@@ -568,7 +568,7 @@
                     onclick="openManufacturingPopup('crosslinking-panel', this)">See more</button>
                 </div>
               </article>
-            </div>
+            </div> -->
 
             <div class="plus-minus-section">
               <div class="plus-minus-row">
@@ -650,7 +650,7 @@
                 <div class="h-full">
                 <div class="selected-area-image flex h-full items-end justify-end">
                   <div class="face-image-container">
-                    <img class="women-face" src="./assets/images/Rheologic considerations for filler/womenface_2.png"
+                    <img class="women-face" src="./assets/images/Rheologic considerations for filler/women_face.png"
                       alt="Facial anatomy" />
                     <svg class="face-markers" viewBox="0 0 1704 2103" preserveAspectRatio="xMidYMid meet"
                       aria-hidden="true">
@@ -1303,20 +1303,28 @@
           <div class="viscoelasticity-stages">
             <figure class="viscoelasticity-stage">
               <h3>No Crosslinking</h3>
-              <img src="./assets/images/pure_liquid.png" alt="Uncrosslinked HA polymer chains in a liquid state" />
+             <div class="viscoelasticity-stage-blockimage">
+               <img src="./assets/images/pure_liquid.png" alt="Uncrosslinked HA polymer chains in a liquid state" />
               <figcaption>Purely Viscous<br />(Liquid)</figcaption>
+             </div>
             </figure>
-            <img class="viscoelasticity-stage-arrow" src="./assets/images/Arrow_elasticity.png" alt="" aria-hidden="true" />
+            <img class="viscoelasticity-stage-arrow desktop_img" src="./assets/images/Arrow_elasticity.png" alt="" aria-hidden="true"  />
+            <img class="viscoelasticity-stage-arrow mobile_img" src="./assets/images/Arrow_elasticity_mbl.png" alt="" aria-hidden="true" />
             <figure class="viscoelasticity-stage">
               <h3>Some Crosslinking</h3>
+             <div class="viscoelasticity-stage-blockimage">
+
               <img src="./assets/images/viscosity_gel.png" alt="HA polymer chains with some crosslinks, forming a viscoelastic gel" />
               <figcaption>Viscoelastic<br />(Gel)</figcaption>
+              </div>
             </figure>
             <img class="viscoelasticity-stage-arrow" src="./assets/images/Arrow_elasticity.png" alt="" aria-hidden="true" />
             <figure class="viscoelasticity-stage">
               <h3>More Crosslinking</h3>
+              <div class="viscoelasticity-stage-blockimage">
               <img src="./assets/images/Elasticity_solid.png" alt="HA polymer chains with more crosslinks, forming an elastic solid" />
               <figcaption>Elastic<br />(Solid)</figcaption>
+              </div>
             </figure>
           </div>
           <p class="viscoelasticity-summary">Generally, all other parameters being equal, the greater the degree of crosslinking* the harder the gel becomes<sup>4</sup></p>
@@ -1334,7 +1342,7 @@
                 <li>Crosslinking creates a gel mass that cannot pass through a needle and therefore requires modification for injection.</li>
               </ul>
             </div>
-            <img class="crosslinkers-illustration" src="./assets/images/Crosslinkers.png"
+            <img class="crosslinkers-illustration" src="./assets/images/Crosslinkers2.png"
               alt="Illustration of HA chains and crosslinkers forming a crosslinked gel" />
           </div>
 
@@ -1480,6 +1488,7 @@
       </div>
       <button type="button" class="modal-close rheology-popup-close" aria-label="Close rheology details"
         onclick="closeModal('rheologyInfoModal')">×</button>
+        
     </div>
   </div>
 

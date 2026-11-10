@@ -936,7 +936,7 @@
     }
 
     .sizing-intro {
-        grid-template-columns: minmax(0, 1fr) 90px;
+        grid-template-columns: 1fr;
     }
 
     .sizing-method-cards {
@@ -953,7 +953,7 @@
     }
 
     .mechanical-properties-content {
-        grid-template-columns: minmax(0, 1fr) 100px;
+        grid-template-columns: 1fr ;
         gap: 0.45rem;
     }
 
@@ -977,9 +977,7 @@
         height: 72px;
     }
 
-    .uncrosslinked-figure img {
-        max-height: 260px;
-    }
+    
 
     .molecular-weight-figure img {
         max-height: 190px;
@@ -1005,6 +1003,8 @@
 
     .cubic-box-row {
         padding: 0.9rem;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .filler-selection-layout {
@@ -1177,13 +1177,68 @@
         padding-bottom: 0.5rem;
     }
 
-    .mobile-mfg-cards{
+    /* .mobile-mfg-cards{
         display:grid;
     }
 
     .desktop-mfg-cards{
         display:none;
-    }
+    } */
+  
+
+     .mfg-cards {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    margin: 1rem 0;
+  }
+
+  .mfg-card {
+    display: grid;
+    grid-template-columns: 42% minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 0;
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .mfg-card img {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    max-height: 110px;
+    object-fit: contain;
+  }
+
+   .mfg-card-content {
+    display: contents;
+  }
+
+ .mfg-card-content > p {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .mfg-more {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: start;
+    margin-top: 0.25rem;
+    padding: 0.65rem 1.6rem;
+    font-size: 15px;
+    border-radius: 30px;
+  }
+
+  .mfg-card-content {
+  display: contents;
+}
+
+    
 
 .viscoelasticity-visual > img.mobile_img{
   display:block;
@@ -1207,5 +1262,130 @@
     .elasticity-video-placeholder {
         min-height: 155px;
     }
+
+    .overview-footer {
+       
+        flex-direction: column-reverse;
+        margin-top: 0.5rem;
+        
+    }
+
+    .manufacturing-footer {
+        flex-direction: column-reverse;
+        margin-top: 0.5rem;
+    }
+
+     .manufacturing-footnote {
+        margin-top: 0rem;
+    }
+    #properties-content > .manufacturing-footer,
+#physiocochemical-features > .physio-footnote {
+  margin-top: 0.5rem;
+}
+
+.molecular-weight-copy {
+    border: none;
+}
+.molecular-weight-figure {
+    margin:0rem 0.8rem;
+}
+
+.manufacturing-modal-footnote {
+    
+    margin-left: 0rem;
+}
+
+.viscoelasticity-stages {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    align-items: center;
+    gap: 0.5rem;
+  } 
+
+   .viscoelasticity-stage-arrow {
+    margin: auto;
+} 
+
+  .viscoelasticity-stages>img.mobile_img {
+    display: block;
+  }
+
+  .viscoelasticity-stages>img.desktop_img {
+    display: none;
+  }
+
+  .viscoelasticity-stage img {
+   
+    margin: 0rem;
+    
+}
+
+  .viscoelasticity-stage-blockimage {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .viscoelasticity-stage img {
+    display: block;
+    width: 35%;
+    height: 90px;
+    margin: 0;
+    object-fit: contain;
+  }
+
+  .viscoelasticity-stage figcaption {
+    flex: 1;
+    min-height: auto;
+    padding: 0.2rem;
+    color: var(--color-text-main);
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+.crosslinkers-illustration {
+    
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    padding: 0.5rem 0rem;
+    
+}
+
+.overview-card h2 {
+    min-height: 0;
+}
+
+#mechanical > .overview-footer {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.overview-footnote{
+    margin-top: 1rem;
+}
+
+.uncrosslinked-figure img {
+    max-height:310px;
+}
+.molecular-weight-footnote{
+    margin-left:1rem;
+}
+.uncrosslinked-footnote{
+    margin-left:1rem;
+}
+
+/* .face-image-container {
+  
+  aspect-ratio: 8 / 9;
+}
+
+.face-image-container img.women-face {
+  right:-8px;
+} */
 
 }
