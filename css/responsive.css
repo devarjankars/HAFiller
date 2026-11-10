@@ -1530,6 +1530,12 @@
     margin-left:1rem;
 }
 
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+
 /* .face-image-container {
   
   aspect-ratio: 8 / 9;
