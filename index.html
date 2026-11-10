@@ -24,7 +24,7 @@
   <!-- ═══════════════════════════════════════════════
        VIEW 1 — HOME PAGE
        ═══════════════════════════════════════════════ -->
-  <div id="home" class="view">
+  <div id="home" class="view active">
 
     <!-- Background photo -->
     <img src="./assets/images/bg-photo.png" alt="" aria-hidden="true"
@@ -88,11 +88,11 @@
   <!-- ═══════════════════════════════════════════════
        VIEW 2 — APP SHELL (sidebar + content)
        ═══════════════════════════════════════════════ -->
-  <div id="app" class="view active h-full">
+  <div id="app" class="view h-full">
     <div class="sideBarmobileheader flex md:hidden bg-white items-center justify-between px-6 py-3">
-      <div class="sm-logo">
+      <button class="sm-logo" type="button" aria-label="Go to home page" onclick="showView('home')">
         <img src="./assets/images/logo.svg" alt="Allergan Aesthetics" />
-      </div>
+      </button>
       <button
         class="smMenuToggle w-12 h-12 border border-[#8B91A43D] rounded-md bg-white p-1 cursor-pointer flex items-center justify-center"
         id="sidebarToggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
@@ -244,11 +244,13 @@
 
               <div class="overview-video-grid" aria-label="Videos">
                 <video class="overview-video" controls playsinline preload="metadata"
+                  poster="./assets/images/Videos/thumbnails/Juvederm_Vollure_XC.jpg"
                   aria-label="Juvéderm Vollure XC video">
                   <source src="./assets/images/Videos/Juvederm_Vollure_XC.mp4" type="video/mp4" />
                   Your browser does not support HTML video.
                 </video>
                 <video class="overview-video" controls playsinline preload="metadata"
+                  poster="./assets/images/Videos/thumbnails/Juvederm_Ultra_Plus_XC.jpg"
                   aria-label="Juvéderm Ultra Plus XC video">
                   <source src="./assets/images/Videos/Juvederm_Ultra_Plus_XC.mp4" type="video/mp4" />
                   Your browser does not support HTML video.
@@ -1418,6 +1420,7 @@
           </div>
           <div class="elasticity-popup-details">
             <video class="elasticity-video-placeholder" controls playsinline preload="metadata"
+              poster="./assets/images/Videos/thumbnails/Elasticity.jpg"
               aria-label="Elasticity assay video">
               <source src="./assets/images/Videos/Elasticity.mp4" type="video/mp4" />
               Your browser does not support HTML video.
@@ -1459,6 +1462,7 @@
           </div>
           <div class="elasticity-popup-details">
             <video class="elasticity-video-placeholder" controls playsinline preload="metadata"
+              poster="./assets/images/Videos/thumbnails/Cohesivity.jpg"
               aria-label="Cohesivity assay video">
               <source src="./assets/images/Videos/Cohesivity.mp4" type="video/mp4" />
               Your browser does not support HTML video.
@@ -1507,6 +1511,7 @@
         </div>
         <div class="elasticity-popup-details">
           <video class="elasticity-video-placeholder" controls playsinline preload="metadata"
+            poster="./assets/images/Videos/thumbnails/HA_crosslinking.jpg"
             aria-label="Water uptake assay video">
             <source src="./assets/images/Videos/HA_crosslinking.mp4" type="video/mp4" />
             Your browser does not support HTML video.
@@ -1616,6 +1621,25 @@
     </div>
   </div>
 
+  <div class="orientation-lock" role="dialog" aria-modal="true" aria-label="Screen orientation guidance"
+    tabindex="-1">
+    <div class="orientation-lock__device orientation-lock__device--phone" aria-hidden="true">
+      <span class="orientation-lock__screen"></span>
+      <span class="orientation-lock__camera"></span>
+    </div>
+    <div class="orientation-lock__device orientation-lock__device--tablet" aria-hidden="true">
+      <span class="orientation-lock__screen"></span>
+      <span class="orientation-lock__camera"></span>
+    </div>
+    <div class="orientation-lock__copy orientation-lock__copy--phone">
+      <h1 id="orientation-lock-title">Please rotate your phone</h1>
+      <p>This experience works best in portrait mode.</p>
+    </div>
+    <div class="orientation-lock__copy orientation-lock__copy--tablet">
+      <h1 id="orientation-lock-title-tablet">Please rotate your tablet</h1>
+      <p>This experience works best in landscape mode.</p>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════
        SCRIPTS

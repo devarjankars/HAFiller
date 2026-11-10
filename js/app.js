@@ -17,32 +17,6 @@
 
 "use strict";
 
-const mobilePropertiesNavigation = window.matchMedia('(max-width: 768px)');
-
-function isPropertiesNavigationDisabled() {
-  return mobilePropertiesNavigation.matches;
-}
-
-function updatePropertiesNavigationAvailability() {
-  const disabled = isPropertiesNavigationDisabled();
-  const homeCard = document.getElementById('nav-product-selection');
-  const menuItem = document.getElementById('menu-product-selection');
-
-  if (homeCard) {
-    homeCard.disabled = disabled;
-    homeCard.setAttribute('aria-disabled', String(disabled));
-  }
-
-  if (menuItem) {
-    menuItem.classList.toggle('is-disabled', disabled);
-    menuItem.setAttribute('aria-disabled', String(disabled));
-    menuItem.tabIndex = disabled ? -1 : 0;
-  }
-}
-
-updatePropertiesNavigationAvailability();
-mobilePropertiesNavigation.addEventListener('change', updatePropertiesNavigationAvailability);
-
 /* ═════════════════════════════════════════════════
    View switching — Home ↔ App
    ═════════════════════════════════════════════════ */
@@ -66,8 +40,6 @@ function showView(viewId) {
  * @param {string} sectionId
  */
 function navigateTo(sectionId) {
-  if (sectionId === 'product-selection' && isPropertiesNavigationDisabled()) return;
-
   showView('app');
   showSection(sectionId, null);
 }
@@ -258,8 +230,6 @@ function switchManufacturingDetail(button, panelId) {
  * @param {Event|null} event - originating click event (may be null)
  */
 function showSection(id, event) {
-  if (id === 'product-selection' && isPropertiesNavigationDisabled()) return;
-  
   // 1. Hide all content sections
   document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
 
@@ -483,17 +453,9 @@ function closeModal(modalId) {
   }
 }
 
-// Close modal when clicking backdrop
-document.addEventListener('click', function (e) {
-  if (e.target.classList.contains('modal-overlay')) {
-    closeModal(e.target.id);
-  }
-});
-
-// Keyboard escape to close modals
+// Escape closes fullscreen views, but modal dialogs stay open until dismissed explicitly.
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
     closeFullscreen();
     return;
   }
@@ -742,7 +704,73 @@ function closeMobileSidebar() {
 
 document.addEventListener('DOMContentLoaded', () => {
   // Show the home view by default
-  showView('app');
+  showView('home');
+
+  const phoneLandscapeQuery = window.matchMedia(
+    '(orientation: landscape) and (max-width: 950px)'
+  );
+  const tabletPortraitQuery = window.matchMedia(
+    '(orientation: portrait) and (min-width: 600px) and (max-width: 1100px)'
+  );
+  const orientationLock = document.querySelector('.orientation-lock');
+  let previouslyFocusedElement = null;
+
+  const updateOrientationLock = () => {
+    const isLocked = phoneLandscapeQuery.matches || tabletPortraitQuery.matches;
+    document.querySelectorAll('.view').forEach(view => {
+      view.inert = isLocked;
+    });
+
+    if (!orientationLock) return;
+
+    if (isLocked && !orientationLock.classList.contains('is-active')) {
+      previouslyFocusedElement = document.activeElement;
+      orientationLock.classList.add('is-active');
+      orientationLock.focus();
+    } else if (!isLocked && orientationLock.classList.contains('is-active')) {
+      orientationLock.classList.remove('is-active');
+      if (previouslyFocusedElement instanceof HTMLElement && previouslyFocusedElement.isConnected) {
+        previouslyFocusedElement.focus();
+      }
+    }
+  };
+
+  phoneLandscapeQuery.addEventListener('change', updateOrientationLock);
+  tabletPortraitQuery.addEventListener('change', updateOrientationLock);
+  window.addEventListener('resize', updateOrientationLock);
+  window.addEventListener('orientationchange', updateOrientationLock);
+  updateOrientationLock();
+
+  document.querySelectorAll('video').forEach(video => {
+    const player = document.createElement('div');
+    player.className = 'video-player';
+    video.parentNode.insertBefore(player, video);
+    player.appendChild(video);
+
+    const playButton = document.createElement('button');
+    playButton.type = 'button';
+    playButton.className = 'video-play-overlay';
+    playButton.setAttribute('aria-label', `Play ${video.getAttribute('aria-label') || 'video'}`);
+    playButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.8v16.4L21 12 7 3.8Z" fill="currentColor"/></svg>';
+    player.appendChild(playButton);
+
+    playButton.addEventListener('click', () => {
+      video.play().catch(error => {
+        if (error.name !== 'AbortError') {
+          console.error('Video playback could not be started.', error);
+        }
+      });
+    });
+    video.addEventListener('play', () => {
+      playButton.hidden = true;
+    });
+    video.addEventListener('pause', () => {
+      playButton.hidden = false;
+    });
+    video.addEventListener('ended', () => {
+      playButton.hidden = false;
+    });
+  });
 
   // Default section inside app shell
   const firstTimeline = document.querySelector('.timeline-item');
