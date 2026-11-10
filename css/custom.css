@@ -2363,7 +2363,7 @@ th {
   display: block;
   width: 30%;
   height: 30%;
-  margin-left: 5%;
+  /* margin-left: 5%; */
 }
 
 .video-play-overlay:focus-visible {
