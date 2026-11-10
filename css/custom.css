@@ -4227,3 +4227,18 @@ position: fixed;
   font-size: 1.4rem;
   font-weight: 400;
 }
+
+
+ .mobile-mfg-cards{
+        display:none;
+    }
+
+    .desktop-mfg-cards{
+        display:grid;
+    }
+.viscoelasticity-visual > img.mobile_img{
+  display:none;
+}
+.viscoelasticity-visual > img.desktop_img{
+  display:block;
+}

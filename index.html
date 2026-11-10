@@ -416,7 +416,9 @@
             </div>
 
             <div class="viscoelasticity-visual">
-              <img src="./assets/images/CrystalRoundStone.png"
+              <img src="./assets/images/CrystalRoundStone.png" class="desktop_img"
+                alt="Shear stress response showing elastic, viscoelastic, and viscous material behavior" />
+                 <img src="./assets/images/crystalroundstone_mbl.png" class="mobile_img"
                 alt="Shear stress response showing elastic, viscoelastic, and viscous material behavior" />
           
             </div>
@@ -530,7 +532,27 @@
           <div class="manufacturing-page" id="manufacturing-page-2" hidden>
             <h1>Variations in Manufacturing Processes Yield Distinct HA Dermal Filler Products<sup>3</sup></h1>
 
-            <div class="mfg-cards">
+            <div class="mfg-cards desktop-mfg-cards">
+              <article class="mfg-card">
+                <img src="./assets/images/HAConcentration.png" alt="Illustration of HA concentration increasing" />
+                <div class="mfg-card-content">
+                  <p><strong>HA concentration</strong> is the total amount of HA in a filler (un-crosslinked and crosslinked).</p>
+                  <button type="button" class="btn-primary mfg-more" aria-haspopup="dialog"
+                    onclick="openManufacturingPopup('ha-concentration-panel', this)">See more</button>
+                </div>
+              </article>
+
+              <article class="mfg-card">
+                <img src="./assets/images/Crosslinking.png" alt="Illustration of HA chains being crosslinked" />
+                <div class="mfg-card-content">
+                  <p><strong>Crosslinking</strong> the HA chains transforms an HA solution into a viscoelastic gel.</p>
+                  <button type="button" class="btn-primary mfg-more" aria-haspopup="dialog"
+                    onclick="openManufacturingPopup('crosslinking-panel', this)">See more</button>
+                </div>
+              </article>
+            </div>
+
+            <div class="mfg-cards mobile-mfg-cards">
               <article class="mfg-card">
                 <img src="./assets/images/HAConcentration.png" alt="Illustration of HA concentration increasing" />
                 <div class="mfg-card-content">
@@ -630,7 +652,7 @@
                 <div class="h-full">
                 <div class="selected-area-image flex h-full items-end justify-end">
                   <div class="face-image-container">
-                    <img class="women-face" src="./assets/images/Rheologic considerations for filler/women_face.png"
+                    <img class="women-face" src="./assets/images/Rheologic considerations for filler/womenface_2.png"
                       alt="Facial anatomy" />
                     <svg class="face-markers" viewBox="0 0 1704 2103" preserveAspectRatio="xMidYMid meet"
                       aria-hidden="true">
