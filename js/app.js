@@ -236,6 +236,8 @@ function showSection(id, event) {
   // 2. Show the target section
   const target = document.getElementById(id);
   if (target) target.classList.add('active');
+  if (id === 'mechanical') switchOverviewPage(1);
+  if (id === 'properties-content') switchManufacturingPage(1);
   if (id === 'FillerSelection' && typeof syncFaceMarkerSize === 'function') {
     syncFaceMarkerSize();
   }

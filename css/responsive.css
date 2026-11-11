@@ -1582,6 +1582,85 @@
     }
 }
 
+@media (orientation: landscape) and (min-width: 901px) and (max-width: 1366px) {
+    #home {
+        height: 100vh;
+        height: 100svh;
+        min-height: 0;
+    }
+
+    #home main > div:first-child {
+        position: absolute;
+        z-index: 2;
+        top: 44%;
+        right: auto;
+        left: clamp(1.25rem, 4vw, 3rem);
+        width: min(32vw, 330px);
+        height: auto;
+        gap: clamp(0.5rem, 1.2vh, 0.8rem);
+        justify-content: center;
+        padding: 0;
+        transform: translateY(-50%);
+    }
+
+    #home .home-card {
+        min-height: clamp(76px, 13vh, 100px);
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem clamp(0.75rem, 1.4vw, 1.25rem);
+        border-radius: 16px;
+    }
+
+    #home .home-card img {
+        width: clamp(34px, 4vw, 44px);
+        height: clamp(34px, 4vw, 44px);
+        flex: 0 0 clamp(34px, 4vw, 44px);
+        margin: 0;
+    }
+
+    #home .home-card p {
+        font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+        line-height: 1.25;
+    }
+
+    .home-hero-picture {
+        right: 0;
+        left: auto;
+        height: 82svh;
+        margin: 0;
+    }
+
+    .home-footer {
+        align-items: flex-end;
+        gap: 1rem;
+        padding: 0 3vw 0.6rem;
+    }
+
+    .home-footer-legal {
+        max-width: 66%;
+        font-size: clamp(9px, 0.9vw, 11px);
+        line-height: 1.25;
+    }
+
+    .home-footer-legal > p {
+        margin-top: 0.25rem;
+        font-size: clamp(9px, 0.95vw, 12px);
+    }
+
+    .home-footer-legal p + p {
+        margin-top: 0.4rem;
+        font-size: clamp(8px, 0.8vw, 10px);
+    }
+
+    .home-footer-title {
+        max-width: 28%;
+        padding-bottom: 0.2rem;
+        font-size: clamp(12px, 1.4vw, 17px);
+    }
+}
+
 @media (orientation: portrait) and (min-width: 600px) and (max-width: 1100px) {
     .orientation-lock {
         display: flex;
@@ -1599,5 +1678,64 @@
 
     body > :not(.orientation-lock) {
         visibility: hidden;
+    }
+}
+
+@media (orientation: landscape) and (min-width: 951px) and (max-width: 1366px) {
+    html,
+    body {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    #app.active {
+        height: 100vh;
+        height: 100svh;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .mainContainer {
+        height: 100%;
+        min-height: 0;
+        flex: 1 1 auto;
+        overflow: hidden;
+    }
+
+    .main-content {
+        height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+    }
+
+    #FillerSelection.active,
+    #FillerSelection .FillerSelectionContent,
+    #FillerSelection .filler-selection-layout,
+    #FillerSelection .body-part-selector,
+    #FillerSelection .body-part-filter {
+        min-height: 0;
+    }
+
+    #FillerSelection .selected-area-image {
+        overflow: hidden;
+    }
+
+    #FillerSelection .face-image-container {
+        width: 62%;
+        max-width: 420px;
+        margin-left: auto;
+    }
+
+    #FillerSelection .selected-area-image #image_marker {
+        top: 50%;
+        right: auto;
+        bottom: auto;
+        left: 1rem;
+        width: 34%;
+        height: auto;
+        max-height: 80%;
+        object-fit: contain;
+        transform: translateY(-50%);
     }
 }
