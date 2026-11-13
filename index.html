@@ -209,7 +209,7 @@
                     <li>HA concentration</li>
                     <li>HA polymer length</li>
                     <li>Degree of crosslinking</li>
-                    <li>Post-crosslinking modifications (eg, sieving, homogenization)</li>
+                    <li>Post-crosslinking modifications <br>(eg, sieving, homogenization)</li>
                   </ul>
                 </article>
 
@@ -445,7 +445,7 @@
               <div class="physio-text">
                 <p><strong>Extrusion force</strong> is the force required to deliver filler through a needle or cannula
                   at a fixed rate, influenced by gel viscosity.</p>
-                <p>The lower the viscosity, the less effort is needed to inject the filler<sup>1</sup></p>
+                <p>The <b>lower</b> the viscosity, the <b>less effort</b> is needed to inject the filler<sup>1</sup></p>
               </div>
             </article>
 
@@ -460,7 +460,7 @@
               <div class="physio-text">
                 <p><strong>Water uptake</strong> is the ability of a filler to swell when exposed to moisture<sup>2</sup>
                 </p>
-                <p>The higher the water uptake, the greater the extent of initial volumization<sup>2</sup></p>
+                <p>The <b>higher</b> the water uptake, the <b>greater the extent of initial volumization</b><sup>2</sup></p>
               </div>
               <button type="button" class="rheo-see-more physio-see-more"
                 onclick="openPhysicochemicalPopup(this)">See more</button>
@@ -845,7 +845,7 @@
 
           <div
             style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
-            <h1>Please select from the products below<sup>1-26</sup></h1>
+            <h1>Please select from the products below<sup>1-29</sup></h1>
             <button class="go-back-btn" id="GoBackHome" onclick="showView('home')">
               ← Go back
             </button>
@@ -858,9 +858,9 @@
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <input type="text" id="brandSearch" placeholder="Search by brand" />
+              <input type="text" id="brandSearch" placeholder="Search by brand or product" />
             </div>
-            <div style="display:flex;align-items:center;gap:0.5rem;">
+            <div style="display:flex;align-items:center;gap:0.8rem;">
               <label for="brandSort" style="font-size:14px;font-weight:500;">Sort by</label>
               <select class="sort-select" id="brandSort">
                 <option value="asc">Alphabetical Asc. (A – Z)</option>
@@ -927,7 +927,7 @@
 
           <!-- Header -->
           <div class="filler-header">
-            <h1 id="filler-heading">Filler properties</h1>
+            <h1 id="filler-heading">Product Comparison</h1>
             <button class="go-back-btn" id="GoBack" style="display:none;"
              >
               ← Go back
@@ -1036,21 +1036,31 @@
                 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
                 <div class="toggle-btns">
                   <div class="toggle-btn active" id="showGraph" onclick="switchGraphTable('graph')">
-                    📈 Graph
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 2.5V13.5H14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                      <path d="M4.5 10L7 7.5L9 9L12.5 5" stroke="currentColor" stroke-width="1.2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M10.5 5H12.5V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                    <span>Graph</span>
                   </div>
                   <div class="toggle-btn" id="showTable" onclick="switchGraphTable('table')">
-                    🗂 Table
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.1" />
+                      <path d="M1.5 6H14.5M5.5 6V13.5M10 6V13.5" stroke="currentColor" stroke-width="1.1" />
+                    </svg>
+                    <span>Table</span>
                   </div>
                 </div>
                 <div class="options-bar">
-                  <div class="edit-option" onclick="showSection('product-selection', null)">
-                    <p>Edit products</p>
-                    <img src="./assets/images/EditProducts.png" alt="" />
-                  </div>
                   <button type="button" class="saveList flex" onclick="openSaveSelectionModal()"
                     aria-label="Save current product selection">
                     <p>Save Selection</p>
-                    <span> <svg width="15" height="19" viewBox="0 0 15 19" fill="none"
+                    <span> <svg width="15" height="15" viewBox="0 0 15 19" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M1.74911 0.556642C1.43305 0.556642 1.12905 0.682147 0.905469 0.906027C0.681848 1.12961 0.556641 1.43279 0.556641 1.74908V17.6283C0.556641 18.0785 0.92035 18.4434 1.37049 18.4434H1.37349C1.61496 18.4434 1.84448 18.3474 2.01441 18.1768C2.80439 17.3874 5.13564 15.0562 6.09855 14.0951C6.36685 13.8253 6.7335 13.6736 7.11513 13.6736C7.49672 13.6736 7.8634 13.8253 8.13167 14.0951C9.09755 15.0592 11.4407 17.4018 12.2218 18.184C12.3887 18.3501 12.6123 18.4434 12.8478 18.4434C13.3039 18.4434 13.6736 18.074 13.6736 17.6182V1.74908C13.6736 1.43279 13.5484 1.12961 13.3248 0.906027C13.1012 0.682147 12.7972 0.556642 12.4811 0.556642H1.74911Z"
@@ -1058,8 +1068,19 @@
                           stroke-linejoin="round" />
                       </svg></span>
                   </button>
+                  <div class="edit-option" onclick="showSection('product-selection', null)">
+                    <p>Edit products</p>
+                    <img src="./assets/images/EditProducts.png" alt="" />
+                  </div>
                   <div class="toggle-btn" id="fullscreenBtn" onclick="openFullscreen()">
-                    Full screen ⛶
+                    <span>Full screen</span>
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 2H2V6M10 2H14V6M2 10V14H6M14 10V14H10" stroke="currentColor" stroke-width="1.2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M2.5 2.5L6 6M13.5 2.5L10 6M2.5 13.5L6 10M13.5 13.5L10 10" stroke="currentColor"
+                        stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -1598,18 +1619,55 @@
 
   <!-- Fullscreen modal -->
   <div class="fullscreen-modal" id="fullscreenModal">
-    <div class="fullscreen-header">
-      <h1>Filler properties</h1>
-      <div style="display:flex;gap:0.75rem;align-items:center;">
-        <div class="toggle-btns">
-          <div class="toggle-btn active" id="fsShowGraph" onclick="switchGraphTable('graph', true)">📈 Graph</div>
-          <div class="toggle-btn" id="fsShowTable" onclick="switchGraphTable('table', true)">🗂 Table</div>
+    <div class="fullscreen-stage">
+      <header class="fullscreen-header">
+        <h1>Product Comparison</h1>
+        <div class="fullscreen-exit">
+          <span>Exit Full Screen</span>
+          <button type="button" onclick="closeFullscreen()" aria-label="Exit full screen">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4L10 10M10 4L4 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>
+          </button>
         </div>
-        <button onclick="closeFullscreen()"
-          style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#555;">✕</button>
-      </div>
+      </header>
+      <section class="fullscreen-card" aria-label="Product comparison graph and table">
+        <div class="fullscreen-toolbar">
+          <div class="toggle-btns">
+            <div class="toggle-btn active" id="fsShowGraph" onclick="switchGraphTable('graph', true)">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2.5V13.5H14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M4.5 10L7 7.5L9 9L12.5 5" stroke="currentColor" stroke-width="1.2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M10.5 5H12.5V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span>Graph</span>
+            </div>
+            <div class="toggle-btn" id="fsShowTable" onclick="switchGraphTable('table', true)">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.1" />
+                <path d="M1.5 6H14.5M5.5 6V13.5M10 6V13.5" stroke="currentColor" stroke-width="1.1" />
+              </svg>
+              <span>Table</span>
+            </div>
+          </div>
+          <div class="fullscreen-actions">
+            <button type="button" class="fullscreen-edit-products"
+              onclick="closeFullscreen(); showSection('product-selection', null);">
+              <span>Edit products</span>
+              <img src="./assets/images/EditProducts.png" alt="" />
+            </button>
+       
+          </div>
+        </div>
+        <div id="fullscreenContent"></div>
+      </section>
     </div>
-    <div id="fullscreenContent" style="flex:1;overflow:auto;"></div>
   </div>
 
   <!-- Confirmation popup -->

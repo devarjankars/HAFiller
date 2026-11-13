@@ -733,7 +733,7 @@ font-size: clamp(1rem, 2vw, 1.5rem)
 .rheo-card-text h2 {
   margin: 0 0 0.5rem;
   color: var(--color-brand);
-font-size: clamp(1rem, 2vw, 0.8rem);
+font-size: clamp(1rem, 2vw, 1.8rem);
   font-weight: 500;
 }
 
@@ -1094,13 +1094,13 @@ font-size: clamp(1rem, 2vw, 1.2rem);
 
 .physio-text p {
   color: var(--color-text-main);
-  font-size: 14px;
+  font-size: clamp(14px, 2vw, 22px);
   line-height: 1.45;
 }
 
 .physio-text p:first-child strong {
   color: var(--color-brand);
-  font-size: 15px;
+  font-size: clamp(14px, 2vw, 22px);
   font-weight: 500;
 }
 
@@ -1616,6 +1616,7 @@ left: 5vw;
   display: flex;
   gap: 1.25rem;
   flex-wrap: wrap;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -1630,6 +1631,9 @@ left: 5vw;
 .brand-detail-col {
   flex: 1;
   min-width: 260px;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .stats-bar {
@@ -1784,8 +1788,8 @@ left: 5vw;
   border: 1px solid var(--color-stroke);
   border-radius: 50px;
   padding: 0.4rem 1rem;
-  background: #fff;
-  min-width: 200px;
+  background: #F3F4F6;
+  min-width: 300px;
 }
 
 .search-box input {
@@ -1793,6 +1797,7 @@ left: 5vw;
   outline: none;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
+  font-style: italic;
   width: 100%;
   background: transparent;
 }
@@ -1803,7 +1808,7 @@ left: 5vw;
   padding: 0.4rem 1rem;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
-  background: #fff;
+  background: #F3F4F6;
   cursor: pointer;
   outline: none;
 }
@@ -1914,7 +1919,7 @@ left: 5vw;
 }
 
 .fixed-footer .logo-area img {
-  height: min(70px, 4vh);
+  height: min(70px, 6vh);
 }
 
 .fixed-footer .disclaimer {
@@ -1929,34 +1934,77 @@ font-size: 14px;
 /* ── Graph Container Section ────────────────────────── */
 .filler-header {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #e8eaf0;
+}
+
+#graphContainer .filler-header h1 {
+  margin: 0;
+  color: var(--color-brand);
+  font-size: clamp(1.45rem, 2.1vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .filler-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .filler-tab-btn {
-  padding: 0.4rem 1.1rem;
-  border: 1.5px solid var(--color-stroke);
-  background: #fff;
-  border-radius: 50px;
+  min-height: 52px;
+  padding: 0.65rem 1.3rem;
+  border: 1px solid transparent;
+  background: #f3f4f6;
+  border-radius: 999px;
   font-family: "Roboto", sans-serif;
-  font-size: 14px;
+  font-size: clamp(0.9rem, 1.25vw, 1.2rem);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
-  color: var(--color-text-main);
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  color: #171717;
+  white-space: nowrap;
+}
+
+.filler-tab-btn:hover {
+  color: var(--color-brand);
+  background: rgba(179, 91, 109, 0.07);
 }
 
 .filler-tab-btn.active {
   background: var(--color-brand);
   border-color: var(--color-brand);
   color: #fff;
+  box-shadow: 0 2px 6px rgba(179, 91, 109, 0.2);
+}
+
+#graphContainer.filler-pane-open .filler-header {
+  padding-bottom: 0;
+  margin-bottom: 2rem;
+  border-bottom: 0;
+}
+
+#graphContainer.filler-pane-open #filler-heading {
+  display: none;
+}
+
+#graphContainer.filler-pane-open #GoBack {
+  order: 0;
+  min-height: 52px;
+  padding: 0.6rem 1.25rem;
+  border-color: var(--color-brand-border);
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+}
+
+#graphContainer.filler-pane-open .filler-tabs {
+  order: 1;
+  margin-left: auto;
 }
 
 .tab-pane {
@@ -1991,6 +2039,71 @@ font-size: 14px;
   color: #fff;
 }
 
+#graphContainer .filler-body {
+  margin-top: 1.25rem !important;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid #e7e9ef;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(37, 44, 58, 0.06);
+}
+
+#graphContainer .filler-body > div:first-child > div:first-child {
+  gap: 0.75rem !important;
+  margin-bottom: 1.25rem !important;
+}
+
+#graphContainer .toggle-btns {
+  gap: 0.2rem;
+  padding: 0.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #f5f6f8;
+}
+
+#graphContainer .toggle-btn {
+  min-height: 36px;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#graphContainer .toggle-btn.active {
+  box-shadow: 0 2px 6px rgba(179, 91, 109, 0.2);
+}
+
+#graphContainer .options-bar {
+  gap: 0.55rem;
+}
+
+#graphContainer .edit-option,
+#graphContainer .options-bar .saveList,
+#graphContainer .options-bar #fullscreenBtn {
+  min-height: 38px;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #fff;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+#graphContainer .edit-option:hover,
+#graphContainer .options-bar .saveList:hover,
+#graphContainer .options-bar #fullscreenBtn:hover {
+  border-color: var(--color-brand-border);
+  background: #fff8f8;
+  color: var(--color-brand);
+}
+
+#graphContainer #scattergraphContainer {
+  height: clamp(320px, 56vh, 480px);
+  padding: 0.75rem;
+  border: 1px solid #edf0f3;
+  border-radius: 16px;
+  background: #fff;
+}
+
 /* Chart containers */
 .lift-container,
 .extrusion-container {
@@ -2001,28 +2114,61 @@ font-size: 14px;
 
 .tissue-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem 1.15rem;
   margin-top: 1rem;
 }
 
 .tissue-card {
-  border: 1px solid var(--color-stroke);
-  border-radius: 8px;
-  overflow: hidden;
-  text-align: center;
+  position: relative;
+  min-width: 0;
+  text-align: left;
 }
 
 .tissue-card img {
-  width: 100%;
-  height: auto;
   display: block;
+  width: 100%;
+  aspect-ratio: 1.68 / 1;
+  border-radius: 15px;
+  object-fit: contain;
 }
 
-.tissue-card p {
-  font-size: 12px;
-  padding: 0.4rem;
-  background: #fafafa;
+.tissue-card > .tag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 1;
+  padding: 15px 15px;
+  border-radius: 999px;
+  background: rgba(67, 67, 67, 0.82);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.tissue-card .tissue-name {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding-top: 5px;
+  color: #272727;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.tissue-card .tissue-dot {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  margin-top: 3px;
+  border-radius: 50%;
+}
+
+@media (max-width: 520px) {
+  .tissue-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* Data table */
@@ -2612,6 +2758,100 @@ th {
 .lift-img img {
   max-width: 100%;
   height: auto;
+}
+
+#pane-lift.active {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 34%);
+  grid-template-areas:
+    "title title"
+    "intro methodology"
+    "message message"
+    "chart chart"
+    "note note";
+  align-items: start;
+  gap: 1rem 2rem;
+}
+
+#pane-lift.active > h2 {
+  grid-area: title;
+  margin: 0 !important;
+  color: var(--color-brand);
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem) !important;
+  line-height: 1.2;
+}
+
+#pane-lift.active > p {
+  grid-area: intro;
+  align-self: center;
+  margin: 0 !important;
+  font-size: clamp(1rem, 1.25vw, 1.2rem) !important;
+  line-height: 1.55;
+}
+
+#pane-lift .lift-img {
+  grid-area: methodology;
+  align-self: center;
+  justify-self: end;
+  width: min(100%, 440px);
+  margin: 0;
+}
+
+#pane-lift .lift-img img {
+  display: block;
+  width: 100%;
+  max-height: 130px;
+  object-fit: contain;
+}
+
+#pane-lift #liftMessage {
+  grid-area: message;
+}
+
+#pane-lift .liftcontainer {
+  position: relative;
+  grid-area: chart;
+  width: 100%;
+  /* height: clamp(320px, 46vh, 480px); */
+  min-width: 0;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #e7e9ef;
+  border-radius: 18px;
+  background: #fff;
+}
+
+#pane-lift .liftcontainer canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#pane-lift .footer-note {
+  grid-area: note;
+}
+
+@media (max-width: 760px) {
+  #graphContainer.filler-pane-open .filler-tabs {
+    width: 100%;
+    margin-left: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  #pane-lift.active {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "title"
+      "intro"
+      "methodology"
+      "message"
+      "chart"
+      "note";
+  }
+
+  #pane-lift .lift-img {
+    justify-self: start;
+  }
 }
 
 /* Tissue buttons */
@@ -3448,7 +3688,7 @@ position: absolute;
 
 .modal-close {
   background: transparent;
-  border: 1px solid #1E243338;
+  /* border: 1px solid #1E243338; */
   font-size: 1.2rem;
   cursor: pointer;
   color: #666;
@@ -3494,21 +3734,205 @@ position: absolute;
   display: none;
   position: fixed;
   inset: 0;
-  background: #fff;
+  align-items: center;
+  justify-content: center;
+  background: #b7b7b7;
   z-index: 8000;
-  flex-direction: column;
-  padding: 1.5rem;
+  overflow: hidden;
+  /* padding: 22px; */
 }
 
 .fullscreen-modal.open {
   display: flex;
 }
 
+.fullscreen-stage {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  padding: clamp(24px, 3.4vw, 40px);
+  overflow: hidden;
+  background: #ededed;
+}
+
 .fullscreen-header {
   display: flex;
+  flex: 0 0 auto;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin-bottom: 18px;
+}
+
+.fullscreen-header h1 {
+  margin: 0;
+  color: var(--color-brand);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 500;
+}
+
+.fullscreen-exit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #475061;
+  font-size: 12px;
+}
+
+.fullscreen-exit button {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #87909c;
+  border-radius: 50%;
+  background: #fff;
+  color: #475061;
+  cursor: pointer;
+}
+
+.fullscreen-card {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 18px 22px 22px;
+  border: 1px solid #e1e1e1;
+  border-radius: 25px;
+  background: #fff;
+}
+
+.fullscreen-toolbar {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 16px;
+}
+
+.fullscreen-toolbar .toggle-btns {
+  gap: 0.2rem;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f2f4;
+}
+
+.fullscreen-toolbar .toggle-btn {
+  min-height: 32px;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.fullscreen-toolbar .toggle-btn.active {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.fullscreen-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.fullscreen-edit-products {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 10px;
+  padding: 0.45rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f2f4;
+  color: #475061;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+
+.fullscreen-edit-products img {
+  width: 15px;
+}
+
+.fullscreen-draw-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f2f4;
+  color: #87909c;
+}
+
+#fullscreenContent {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#fullscreenContent #scattergraphContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#fullscreenContent #tableContainer {
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto !important;
+}
+
+#fullscreenContent #tableContainer table {
+  width: 100%;
+  min-width: 720px;
+}
+
+@media (max-width: 600px) {
+
+  .fullscreen-stage {
+    padding: 18px 12px 12px;
+  }
+
+  .fullscreen-header {
+    margin-bottom: 12px;
+  }
+
+  .fullscreen-card {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .fullscreen-toolbar {
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .fullscreen-actions {
+    gap: 8px;
+  }
+
+  #fullscreenContent #scattergraphContainer {
+    min-height: 280px;
+  }
 }
 
 /* Popup */
@@ -3590,7 +4014,7 @@ position: fixed;
 }
 
 .edit-option img {
-  width: 18px;
+  width: 15px;
 }
 
 /* Options bar */
@@ -4136,7 +4560,7 @@ position: fixed;
 /* ── Product cards grid ──────────────────────────────── */
 .products {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 0.65rem;
 }
 

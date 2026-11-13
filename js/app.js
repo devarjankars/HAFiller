@@ -361,6 +361,7 @@ function switchFillerTab(btn, tabId) {
   document.querySelectorAll('#fillerTabsContent .tab-pane').forEach(p => p.classList.remove('active'));
   const pane = document.getElementById('pane-' + tabId);
   if (pane) pane.classList.add('active');
+  document.getElementById('graphContainer')?.classList.add('filler-pane-open');
   document.querySelector('.filler-body').style.display = "none";
   document.getElementById('GoBack').style.display = "block";
   // Re-render / resize charts when their tab becomes visible
@@ -378,6 +379,27 @@ function switchFillerTab(btn, tabId) {
       }
     }
   }, 50);
+}
+
+function resizeScatterChart(stopAnimation = false) {
+  const graphEl = document.getElementById('scattergraphContainer');
+  const canvas = graphEl?.querySelector('canvas');
+  const chart = canvas && typeof Chart !== 'undefined' && typeof Chart.getChart === 'function'
+    ? Chart.getChart(canvas)
+    : null;
+  if (!chart || graphEl.style.display === 'none') return;
+
+  const graphStyle = getComputedStyle(graphEl);
+  const width = graphEl.clientWidth
+    - parseFloat(graphStyle.paddingLeft)
+    - parseFloat(graphStyle.paddingRight);
+  const height = graphEl.clientHeight
+    - parseFloat(graphStyle.paddingTop)
+    - parseFloat(graphStyle.paddingBottom);
+  if (width <= 0 || height <= 0) return;
+
+  if (stopAnimation) chart.stop();
+  chart.resize(width, height);
 }
 
 /**
@@ -406,9 +428,7 @@ function switchGraphTable(mode, inFullscreen = false) {
   if (fsGraphBtn) fsGraphBtn.classList.toggle('active', showGraph);
   if (fsTableBtn) fsTableBtn.classList.toggle('active', !showGraph);
 
-  if (showGraph && window.myChartInstance) {
-    setTimeout(() => window.myChartInstance.resize(), 50);
-  }
+  if (showGraph) resizeScatterChart(inFullscreen);
 }
 
 
@@ -513,23 +533,61 @@ function confirmClearAll() {
    Fullscreen
    ═════════════════════════════════════════════════ */
 
+let fullscreenElements = null;
+
 function openFullscreen() {
   const modal = document.getElementById('fullscreenModal');
-  if (!modal) return;
-
-  // Clone the chart canvas into the fullscreen area
   const content = document.getElementById('fullscreenContent');
-  if (content) {
-    content.innerHTML = '<canvas id="fullscreenChart" style="width:100%;height:100%;"></canvas>';
+  const graphEl = document.getElementById('scattergraphContainer');
+  const tableEl = document.getElementById('tableContainer');
+
+  if (!modal || !content || !graphEl || !tableEl) {
+    console.error('Fullscreen graph and table elements could not be found.');
+    return;
   }
+
+  if (fullscreenElements) return;
+
+  const pageHeading = document.getElementById('filler-heading');
+  const fullscreenHeading = modal.querySelector('.fullscreen-header h1');
+  if (pageHeading && fullscreenHeading) {
+    fullscreenHeading.textContent = pageHeading.textContent;
+  }
+
+  const elements = [graphEl, tableEl].map(element => {
+    const placeholder = document.createComment('');
+    const parent = element.parentNode;
+    parent.insertBefore(placeholder, element);
+    return { element, parent, placeholder };
+  });
+
+  fullscreenElements = elements;
+  const chartCanvas = graphEl.querySelector('canvas');
+  const chart = chartCanvas && typeof Chart !== 'undefined' && typeof Chart.getChart === 'function'
+    ? Chart.getChart(chartCanvas)
+    : null;
+  if (chart) chart.stop();
+  content.replaceChildren(...elements.map(({ element }) => element));
   modal.classList.add('open');
-  // Re-render chart in fullscreen if needed
-  if (typeof renderFullscreenChart === 'function') renderFullscreenChart();
+  switchGraphTable(graphEl.style.display === 'none' ? 'table' : 'graph', true);
 }
 
 function closeFullscreen() {
   const modal = document.getElementById('fullscreenModal');
-  if (modal) modal.classList.remove('open');
+  const content = document.getElementById('fullscreenContent');
+  if (!modal) return;
+
+  fullscreenElements?.forEach(({ element, parent, placeholder }) => {
+    if (placeholder.parentNode) {
+      placeholder.replaceWith(element);
+    } else {
+      parent.append(element);
+    }
+  });
+  fullscreenElements = null;
+  content?.replaceChildren();
+  modal.classList.remove('open');
+  resizeScatterChart(true);
 }
 
 
@@ -555,6 +613,7 @@ function continueAction() {
     showSection('graphContainer', null);
     // Hide the products bar when going back to product selection
     if (goBack) goBack.style.display = 'none';
+    document.getElementById('graphContainer')?.classList.remove('filler-pane-open');
     document.querySelector('.filler-body').style.display = "block";
     document.querySelectorAll('#fillerTabsContent .tab-pane').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.filler-tab-btn').forEach(b => b.classList.remove('active'));
