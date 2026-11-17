@@ -4709,3 +4709,8 @@ position: fixed;
     align-items: center;
     flex-direction: column;
 }
+/* Match the weight of the home navigation labels. */
+#home #nav-FillerSelection p,
+#home #nav-product-selection p {
+  font-weight: 700;
+}
