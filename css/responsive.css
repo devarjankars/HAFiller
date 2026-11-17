@@ -1762,3 +1762,98 @@
         transform: translateY(-50%);
     }
 }
+
+/* Home typography: desktop and landscape iPad. Keep phone rules unchanged. */
+@media (min-width: 951px) {
+    #home .home-card p {
+        font-size: clamp(1rem, 1.68vw, 1.4375rem);
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    #home #nav-mechanical p {
+        font-weight: 700;
+    }
+
+    #home .home-card sup {
+        font-size: 0.6em;
+    }
+
+    #home .home-footer-legal {
+        max-width: 56%;
+        text-align: left;
+    }
+
+    #home .home-footer-legal > p {
+        font-size: clamp(0.75rem, min(1.316vw, 1.755vh), 1.5rem);
+        line-height: 1.2;
+    }
+
+    #home .home-footer-legal p + p {
+        margin-top: 0.75em;
+    }
+
+    #home .home-footer-title {
+        font-size: clamp(0.875rem, min(1.645vw, 2.193vh), 1.875rem);
+        line-height: 1.2;
+        text-align: right;
+        padding-bottom: 0;
+    }
+}
+
+@media (min-width: 951px) and (max-width: 1366px) {
+    #home .home-card p {
+        font-size: clamp(0.875rem, 1.32vw, 1.125rem);
+    }
+}
+
+/* 1080p at 125% scaling, including space used by browser toolbars. */
+@media (min-width: 1367px) and (max-height: 900px) {
+    #home .home-card p {
+        font-size: clamp(1rem, 2.2vh, 1.25rem);
+        line-height: 1.25;
+    }
+
+    #home .home-footer-legal > p:first-child {
+        margin-top: 0;
+    }
+}
+
+/* Overview reference: text scale and alignment for desktop / landscape iPad. */
+@media (min-width: 951px) {
+    #overview-page-1 > h1 {
+        font-size: clamp(1.5rem, 2.4vw, 2.75rem);
+        line-height: 1.2;
+        text-align: left;
+    }
+
+    #overview-page-1 > h1 sup {
+        font-size: 0.6em;
+    }
+
+    #overview-page-1 .overview-card h2,
+    #overview-page-1 .overview-card li {
+        font-size: clamp(0.875rem, min(1.316vw, 1.9vh), 1.5rem);
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    #overview-page-1 .overview-card h2 {
+        min-height: calc(2.6em + 1.5rem + 1px);
+        align-content: center;
+    }
+
+    #mechanical .overview-footnote {
+        font-size: clamp(0.5625rem, 0.713vw, 0.8125rem);
+        line-height: 1.25;
+        text-align: left;
+    }
+
+    #app:has(#mechanical.active) .sidebar-home,
+    #app:has(#mechanical.active) .menu-item p,
+    #app:has(#mechanical.active) .timeline-item {
+        font-size: clamp(0.875rem, 0.9vw, 1rem);
+        line-height: 1.3;
+        text-align: left;
+    }
+}
