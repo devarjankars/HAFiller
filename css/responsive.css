@@ -1965,3 +1965,37 @@
         overflow-wrap: anywhere;
     }
 }
+
+/* Filler selection: editable text only; image cards and face markers stay intact. */
+@media (min-width: 951px) {
+    #FillerSelection .bodypartcontainer p,
+    #FillerSelection .body-part-btn p {
+        width: 100%;
+        min-width: 0;
+        font-size: clamp(0.625rem, 0.732vw, 0.75rem);
+        line-height: 1.2;
+        text-align: center;
+        text-wrap: balance;
+        overflow-wrap: break-word;
+    }
+
+    #FillerSelection .footer-note {
+        max-width: calc(100% - 10vw);
+        font-size: clamp(0.5625rem, 0.66vw, 0.75rem);
+        line-height: 1.25;
+        text-align: left;
+    }
+
+    #FillerSelection .footer-note p {
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    #app:has(#FillerSelection.active) .sidebar-home,
+    #app:has(#FillerSelection.active) .menu-item p,
+    #app:has(#FillerSelection.active) .timeline-item {
+        font-size: clamp(0.875rem, 0.9vw, 1rem);
+        line-height: 1.3;
+        text-align: left;
+    }
+}
