@@ -2423,9 +2423,10 @@
 }
 
 @media (max-width: 599px) and (orientation: portrait) {
+    #home #nav-mechanical p,
     #home #nav-FillerSelection p,
     #home #nav-product-selection p {
-        font-weight: 400;
+        font-weight: 700;
     }
 }
 
