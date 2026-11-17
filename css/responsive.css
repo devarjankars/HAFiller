@@ -2217,13 +2217,52 @@
 /* Phone home and navigation reference. Tablet and desktop rules stay intact. */
 @media (max-width: 599px) and (orientation: portrait) {
     /* Match the rounded assay dialogs and inset panels in the mobile design. */
-    .rheology-popup {
+    .rheology-popup,
+    .manufacturing-modal {
         border-radius: 24px;
     }
 
     .rheology-popup .elasticity-video-placeholder,
     .rheology-popup .elasticity-factors {
         border-radius: 14px;
+    }
+
+    #gel-viscoelasticity-panel .viscoelasticity-stage {
+        border-color: #d9d9d9;
+        border-radius: 14px;
+    }
+
+    #gel-viscoelasticity-panel .viscoelasticity-stage h3 {
+        background: #f6eef0;
+        min-height: 40px;
+        font-size: 14px;
+    }
+
+    #gel-viscoelasticity-panel .viscoelasticity-stage-blockimage {
+        padding: 16px;
+    }
+
+    #gel-viscoelasticity-panel .viscoelasticity-stage figcaption {
+        font-size: 14px;
+    }
+
+    .manufacturing-modal-content {
+        padding: 16px;
+    }
+
+    .manufacturing-topic-tab {
+        font-size: 14px;
+    }
+
+    #gel-viscoelasticity-panel .viscoelasticity-summary {
+        margin-top: 18px;
+        padding: 16px 24px;
+        border-radius: 12px;
+        background: #dc9b8f;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.5;
     }
 
     html:has(#home.active),

@@ -798,19 +798,21 @@ font-size: clamp(0.875rem, 2vw, 1.313rem);
 
 .rheology-popup {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: min(1040px, 88vw);
   max-height: 82vh;
-  overflow: auto;
+  overflow: hidden;
   border-radius: 14px;
   background: #fff;
 }
 
 .rheology-popup-content:not([hidden]) {
-  display: flex;
-  flex-direction: column;
+  display: contents;
 }
 
 .rheology-popup-header {
+  flex: 0 0 auto;
   padding: 1rem 3.5rem 0.8rem 1.5rem;
   /* border-bottom: 1px solid #ececec; */
 }
@@ -823,6 +825,8 @@ font-size: clamp(0.875rem, 2vw, 1.313rem);
 }
 
 .rheology-popup-body {
+  min-height: 0;
+  overflow-y: auto;
   padding: 1rem 1.5rem 1.25rem;
 }
 
@@ -2933,9 +2937,11 @@ th {
 }
 
 .manufacturing-modal {
+  display: flex;
+  flex-direction: column;
  width: min(1040px, 88vw);
   max-height: min(620px, 82vh);
-  overflow: auto;
+  overflow: hidden;
   /* border: 2px dotted #168aff; */
   border-radius: 8px;
   background: #fff;
@@ -2943,6 +2949,7 @@ th {
 }
 
 .manufacturing-modal-header {
+  flex: 0 0 auto;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -3007,6 +3014,8 @@ th {
 }
 
 .manufacturing-modal-content {
+  min-height: 0;
+  overflow-y: auto;
   padding: 0.9rem 1rem 0.6rem;
 }
 
@@ -3701,6 +3710,7 @@ position: absolute;
 }
 
 .modal-header {
+  flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
