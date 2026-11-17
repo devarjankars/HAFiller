@@ -2216,6 +2216,12 @@
 
 /* Phone home and navigation reference. Tablet and desktop rules stay intact. */
 @media (max-width: 599px) and (orientation: portrait) {
+    html:has(#home.active),
+    body:has(#home.active),
+    #home {
+        background-color: #F2D1DD;
+    }
+
     #home {
         height: 100svh;
         min-height: max(100svh, 720px);
