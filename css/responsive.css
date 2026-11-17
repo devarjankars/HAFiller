@@ -2250,6 +2250,25 @@
         padding: 16px;
     }
 
+    /* Leave the same breathing room after the final content in every dialog. */
+    .manufacturing-modal-content,
+    .rheology-popup-body,
+    .modal-box .modal-body {
+        padding-bottom: 24px;
+        scroll-padding-bottom: 24px;
+    }
+
+    .manufacturing-modal-content .manufacturing-modal-footnote,
+    .rheology-popup-body .elasticity-popup-footnote {
+        margin-top: 20px;
+        margin-bottom: 0;
+        padding-top: 0;
+    }
+
+    .modal-box .modal-body > :last-child {
+        margin-bottom: 0;
+    }
+
     .manufacturing-topic-tab {
         font-size: 14px;
     }
