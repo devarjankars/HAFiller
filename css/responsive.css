@@ -441,6 +441,26 @@
         display: block;
     }
 
+    html.sidebar-open {
+        overflow: hidden;
+    }
+
+    body.sidebar-open {
+        position: fixed;
+        top: var(--sidebar-lock-scroll);
+        right: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    body.sidebar-open .sideBarmobileheader {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+
     #sidebarToggle svg path {
         transform-box: fill-box;
         transform-origin: center;
