@@ -1857,3 +1857,111 @@
         text-align: left;
     }
 }
+
+/* Manufacturing, rheology and product selection reference typography. */
+@media (min-width: 951px) {
+    #properties-content h1,
+    #rheology-content h1 {
+        font-size: clamp(1.5rem, 2.4vw, 2.75rem);
+        line-height: 1.2;
+        text-align: left;
+    }
+
+    #properties-content h1 sup,
+    #rheology-content sup {
+        font-size: 0.6em;
+    }
+
+    #properties-content .mfg-process-step {
+        font-size: clamp(0.9375rem, 1.39vw, 1.1875rem);
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    #properties-content .mfg-process-option {
+        font-size: clamp(0.875rem, 1.32vw, 1.125rem);
+        line-height: 1.4;
+        text-align: center;
+    }
+
+    #properties-content .mfg-process-connector {
+        font-size: clamp(0.75rem, 1.1vw, 0.9375rem);
+        line-height: 1.2;
+    }
+
+    #rheology-content .rheology-intro p {
+        font-size: clamp(1rem, 1.76vw, 1.5rem);
+        line-height: 1.25;
+    }
+
+    #rheology-content .rheology-prompt {
+        font-size: clamp(0.9375rem, 1.61vw, 1.375rem);
+        font-weight: 400;
+        line-height: 1.4;
+    }
+
+    #rheology-content .rheo-card-text h2 {
+        font-size: clamp(1.25rem, 2.05vw, 1.75rem);
+        line-height: 1.25;
+        text-align: left;
+    }
+
+    #rheology-content .rheo-card-text p {
+        font-size: clamp(0.9375rem, 1.46vw, 1.25rem);
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    #rheology-content .rheo-see-more {
+        font-size: clamp(0.875rem, 1.32vw, 1.125rem);
+        line-height: 1.3;
+    }
+
+    #properties-content .manufacturing-footnote,
+    #rheology-content .rheology-footnote {
+        font-size: clamp(0.5625rem, 0.732vw, 0.8125rem);
+        line-height: 1.25;
+        text-align: left;
+    }
+
+    #app:has(#properties-content.active, #rheology-content.active) .sidebar-home,
+    #app:has(#properties-content.active, #rheology-content.active) .menu-item p,
+    #app:has(#properties-content.active, #rheology-content.active) .timeline-item {
+        font-size: clamp(0.875rem, 0.9vw, 1rem);
+        line-height: 1.3;
+        text-align: left;
+    }
+
+    #product-selection .ps-title {
+        font-size: clamp(1.5rem, 2.4vw, 2.75rem) !important;
+        font-weight: 400 !important;
+        line-height: 1.2;
+        text-align: left;
+    }
+
+    #product-selection .ps-search-input,
+    #product-selection .ps-sort-label,
+    #product-selection .ps-sort-select,
+    #product-selection .ps-stat-item,
+    #product-selection .ps-clear-btn,
+    #product-selection .ps-ref-btn,
+    #product-selection .brand-header .select-all,
+    #product-selection .brand-header .clear-all {
+        font-size: clamp(0.875rem, 1.32vw, 1.125rem);
+        line-height: 1.3;
+    }
+
+    #product-selection #products .pill span:first-child,
+    #product-selection #products .pill > div > div > span:first-child,
+    #product-selection .subhead h3 {
+        font-size: clamp(1rem, 1.61vw, 1.375rem) !important;
+        line-height: 1.3;
+    }
+
+    #product-selection .products .pill span {
+        font-size: clamp(0.875rem, 1.17vw, 1rem) !important;
+        line-height: 1.2;
+        text-align: left;
+        overflow-wrap: anywhere;
+    }
+}
