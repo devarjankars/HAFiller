@@ -2444,3 +2444,30 @@
         padding-left: 23px;
     }
 }
+
+/* Keep the original selection feedback in the phone navigation. */
+@media (max-width: 599px) and (orientation: portrait) {
+    .sidebar .menu-item.active {
+        background: var(--color-brand);
+        color: #fff;
+    }
+
+    .sidebar .menu-item.active p {
+        font-weight: 500;
+    }
+
+    .sidebar .menu-item.active .menu-icon img {
+        filter: brightness(0) invert(1);
+    }
+
+    .sidebar .timeline-item.active {
+        border: 1px solid #d0d0d0;
+        border-radius: 40px;
+        background: #fff;
+        font-weight: 600;
+    }
+
+    .sidebar .timeline-item.active::before {
+        display: block;
+    }
+}
