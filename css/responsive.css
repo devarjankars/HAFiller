@@ -2216,6 +2216,16 @@
 
 /* Phone home and navigation reference. Tablet and desktop rules stay intact. */
 @media (max-width: 599px) and (orientation: portrait) {
+    /* Match the rounded assay dialogs and inset panels in the mobile design. */
+    .rheology-popup {
+        border-radius: 24px;
+    }
+
+    .rheology-popup .elasticity-video-placeholder,
+    .rheology-popup .elasticity-factors {
+        border-radius: 14px;
+    }
+
     html:has(#home.active),
     body:has(#home.active),
     #home {
