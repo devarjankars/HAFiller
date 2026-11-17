@@ -2143,3 +2143,53 @@
         flex-basis: 58px;
     }
 }
+
+/* Both manufacturing pages share a stationary pagination / reference footer. */
+@media (min-width: 951px) {
+    #properties-content.active {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    #properties-content .manufacturing-page:not([hidden]) {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+    }
+
+    #properties-content > .manufacturing-footer {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        margin-top: clamp(0.75rem, 1.6vh, 1.25rem);
+    }
+
+    #properties-content .manufacturing-footer .overview-pagination {
+        order: 0;
+        margin: 0;
+        padding-block: 0.5rem;
+    }
+
+    #properties-content .manufacturing-footnote {
+        order: 1;
+        min-height: 2.5em;
+    }
+
+    #properties-content .overview-page-arrow,
+    #properties-content .overview-page-number {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    #manufacturing-page-2 .mfg-card > img {
+        height: clamp(8rem, 18.4vh, 15.75rem);
+        object-fit: contain;
+    }
+
+    #manufacturing-page-2 .mfg-card {
+        padding: clamp(0.75rem, min(1.76vw, 2.34vh), 2rem);
+    }
+}
