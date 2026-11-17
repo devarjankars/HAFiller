@@ -2265,6 +2265,13 @@
         padding-top: 0;
     }
 
+    .manufacturing-modal-content .manufacturing-modal-footnote {
+        margin-inline: 0;
+        width: auto;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
     .modal-box .modal-body > :last-child {
         margin-bottom: 0;
     }
