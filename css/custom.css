@@ -340,23 +340,31 @@ img {
 
 /* ── Timeline sub-items ──────────────────────────────── */
 .sidebar-timeline {
+  --timeline-item-gap: 0.4rem;
   position: relative;
   margin: 1rem 0 0.75rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--timeline-item-gap);
 }
 
 /* Vertical line */
-.sidebar-timeline::before {
+.timeline-item::after {
   content: "";
   position: absolute;
-  left: -10px;
-  top: 20px;
+  left: -11px;
+  top: -1px;
+  bottom: calc(-1px - var(--timeline-item-gap));
   width: 1.5px;
-  background: #8a9099;
-  opacity: 0.5;
-  height: calc(100% - 57px);
+  background: #b5b8bf;
+}
+
+.timeline-item:first-child::after {
+  top: 50%;
+}
+
+.timeline-item:last-child::after {
+  bottom: 50%;
 }
 
 .timeline-item {
@@ -367,9 +375,9 @@ img {
   font-weight: 400;
   color: var(--color-text-sub);
   border-radius: 40px;
+  border: 1px solid transparent;
   transition: background 0.2s, color 0.2s;
   line-height: 1.35;
-  margin-bottom: 0.4rem;
 }
 
 .timeline-item:hover {
@@ -380,8 +388,6 @@ img {
 /* Active timeline item: white pill with border */
 .timeline-item.active {
   background: #fff;
-  font-weight: 600;
-  font-size: 14px;
   color: var(--color-text-sub);
   border: 1px solid #e0e0e0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
@@ -2384,6 +2390,11 @@ th {
   object-fit: contain;
 }
 
+.overview-stress-media .overview-shear-animation {
+  /* The resting frame sits left of center so the gel has room to shear right. */
+  transform: translateX(30%);
+}
+
 .overview-stress-media figcaption {
   min-width: 90px;
   padding: 0.35rem 0.75rem;
@@ -2466,7 +2477,6 @@ th {
 
 .overview-video-placeholder,
 .overview-video {
-  min-height: clamp(140px, 23vh, 220px);
   width: 100%;
   border: 1px solid #d7d7d7;
   border-radius: 12px;
@@ -2474,6 +2484,7 @@ th {
 }
 
 .overview-video-placeholder {
+  min-height: clamp(140px, 23vh, 220px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2484,7 +2495,8 @@ th {
 
 .overview-video {
   display: block;
-  object-fit: contain;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 .overview-play-icon {
@@ -2675,9 +2687,13 @@ th {
 }
 
 #mechanical > .overview-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   margin-top: auto;
+  background: #fff;
 }
 
 #mechanical > .overview-footer > .overview-footnote {

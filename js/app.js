@@ -26,6 +26,7 @@
  * @param {'home'|'app'} viewId
  */
 function showView(viewId) {
+  if (viewId !== 'app') resetOverviewVideos();
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(viewId);
   if (target) target.classList.add('active');
@@ -44,12 +45,22 @@ function navigateTo(sectionId) {
   showSection(sectionId, null);
 }
 
+function resetOverviewVideos() {
+  document.querySelectorAll('.overview-video').forEach(resetVideo);
+}
+
+function resetVideo(video) {
+  if (!video.paused || video.currentTime > 0) video.load();
+}
+
 function switchOverviewPage(pageNumber) {
   const targetPage = document.getElementById(`overview-page-${pageNumber}`);
   if (!targetPage) {
     console.error(`Overview page could not be found: ${pageNumber}`);
     return;
   }
+
+  if (pageNumber !== 1) resetOverviewVideos();
 
   document.querySelectorAll('.overview-page').forEach(page => {
     page.hidden = page !== targetPage;
@@ -230,6 +241,7 @@ function switchManufacturingDetail(button, panelId) {
  * @param {Event|null} event - originating click event (may be null)
  */
 function showSection(id, event) {
+  if (id !== 'mechanical') resetOverviewVideos();
   // 1. Hide all content sections
   document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
 
@@ -454,6 +466,9 @@ function openModal(modalId) {
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.classList.remove('open');
+  if (modalId === 'rheologyInfoModal') {
+    modal?.querySelectorAll('video').forEach(resetVideo);
+  }
   if (modalId === 'physicochemicalInfoModal') {
     modal?.querySelector('video')?.pause();
   }
@@ -840,6 +855,9 @@ document.addEventListener('DOMContentLoaded', () => {
       playButton.hidden = false;
     });
     video.addEventListener('ended', () => {
+      playButton.hidden = false;
+    });
+    video.addEventListener('emptied', () => {
       playButton.hidden = false;
     });
   });
