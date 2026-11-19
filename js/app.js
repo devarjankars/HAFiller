@@ -26,7 +26,10 @@
  * @param {'home'|'app'} viewId
  */
 function showView(viewId) {
-  if (viewId !== 'app') resetOverviewVideos();
+  if (viewId !== 'app') {
+    closeRheologyPopups();
+    resetOverviewVideos();
+  }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(viewId);
   if (target) target.classList.add('active');
@@ -144,6 +147,7 @@ function openRheologyPopup(trigger) {
 
   modal.querySelectorAll('[data-rheology-content]').forEach(content => {
     content.hidden = content !== selectedContent;
+    if (content.hidden) content.querySelectorAll('video').forEach(resetVideo);
   });
   rheologyModalTrigger = trigger;
   openModal('rheologyInfoModal');
@@ -241,6 +245,7 @@ function switchManufacturingDetail(button, panelId) {
  * @param {Event|null} event - originating click event (may be null)
  */
 function showSection(id, event) {
+  closeRheologyPopups();
   if (id !== 'mechanical') resetOverviewVideos();
   // 1. Hide all content sections
   document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -459,6 +464,10 @@ function openModal(modalId) {
   
 }
 
+function closeRheologyPopups() {
+  document.querySelectorAll('.rheology-modal-overlay.open').forEach(modal => closeModal(modal.id));
+}
+
 /**
  * Close a modal overlay by ID.
  * @param {string} modalId
@@ -466,12 +475,7 @@ function openModal(modalId) {
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.classList.remove('open');
-  if (modalId === 'rheologyInfoModal') {
-    modal?.querySelectorAll('video').forEach(resetVideo);
-  }
-  if (modalId === 'physicochemicalInfoModal') {
-    modal?.querySelector('video')?.pause();
-  }
+  modal?.querySelectorAll('video').forEach(resetVideo);
   // Only remove modal-open if no other modals are open
   const anyOpen = document.querySelector('.modal-overlay.open, .popup.open');
   if (!anyOpen) document.body.classList.remove('modal-open');
