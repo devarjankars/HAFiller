@@ -1846,7 +1846,7 @@ left: 5vw;
 
 #brandSort {
   appearance: none;
-  width: 16.125rem;
+  min-width: 16.125rem;
   min-height: 2.75rem;
   padding-inline: 1.375rem 2.75rem;
   color: var(--color-text-main);
