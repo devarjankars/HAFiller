@@ -542,8 +542,7 @@ document.addEventListener('keydown', function (e) {
    ═════════════════════════════════════════════════ */
 
 function confirmClearAll() {
-  // Delegate to product.js clearAll logic
-  if (typeof clearAll === 'function') clearAll();
+  clearAllProducts();
   closeModal('confirmClearAllModal');
 }
 
@@ -854,6 +853,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     video.addEventListener('play', () => {
       playButton.hidden = true;
+      if (video.classList.contains('overview-video')) {
+        const main = video.closest('.main-content').getBoundingClientRect();
+        const footer = document.querySelector('#mechanical > .overview-footer').getBoundingClientRect();
+        const frame = player.getBoundingClientRect();
+        const top = Math.max(0, main.top);
+        const bottom = Math.min(window.innerHeight, main.bottom, footer.top);
+        if (frame.top < top || frame.bottom > bottom) {
+          player.scrollIntoView({ block: 'center', inline: 'nearest' });
+        }
+      }
     });
     video.addEventListener('pause', () => {
       playButton.hidden = false;

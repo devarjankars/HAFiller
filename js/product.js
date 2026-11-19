@@ -5972,7 +5972,7 @@ function renderSavedListsDropdown() {
     selectButton.className = "saved-list-option";
     selectButton.setAttribute("role", "menuitem");
     selectButton.textContent = savedList.name;
-    selectButton.addEventListener("click", () => loadSavedList(savedList.name));
+    selectButton.addEventListener("click", () => confirmSavedList(savedList));
 
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
@@ -6097,22 +6097,47 @@ function saveCurrentSelection(event) {
   closeModal("saveSelectionModal");
 }
 
-function loadSavedList(name) {
-  const savedList = SavedList.find((list) => list.name === name);
-  if (!savedList) return;
+function confirmSavedList(savedList) {
+  const cancel = document.getElementById("cancelSavedListBtn");
+  const confirm = document.getElementById("confirmSavedListBtn");
+  document.getElementById("confirmSavedListMessage").textContent =
+    `Use "${savedList.name}" for comparison? This replaces your current selection.`;
+  closeSavedListDropdown();
+  cancel.onclick = () => {
+    closeModal("confirmSavedListModal");
+    savedListToggle.focus();
+  };
+  confirm.onclick = () => {
+    closeModal("confirmSavedListModal");
+    loadSavedList(savedList);
+    if (!proceedBtn.disabled) continueAction();
+    else savedListToggle.focus();
+  };
+  openModal("confirmSavedListModal");
+  cancel.focus();
+}
 
+function loadSavedList(savedList) {
   brands.forEach((brand) => {
     state.selected[brand.brand].clear();
     (savedList.selection[brand.brand] || []).forEach((productName) => {
       state.selected[brand.brand].add(productName);
     });
   });
-document.getElementById("brand-sections").style.display = "block";
+  sectionsDiv.style.display = "block";
+  refreshProductSelection();
+}
+
+function clearAllProducts() {
+  brands.forEach((brand) => state.selected[brand.brand].clear());
+  refreshProductSelection();
+}
+
+function refreshProductSelection() {
   updateClearAllButton();
   updateSelectedCountDisplay();
   renderAll();
   renderSelectedProducts();
-  closeSavedListDropdown();
 }
 
 function deleteSavedList(name) {
@@ -6278,9 +6303,7 @@ function renderSections() {
     clearBtn.addEventListener("click", (e) => {
       e.stopPropagation(); // prevent affecting section click
       state.selected[b.brand].clear();
-      updateClearAllButton();
-      updateSelectedCountDisplay();
-      renderAll();
+      refreshProductSelection();
     });
 
     subhead.append(clearBtn);

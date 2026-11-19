@@ -1673,6 +1673,21 @@
   </div>
 
   <!-- Confirmation popup -->
+  <div class="modal-overlay" id="confirmSavedListModal">
+    <div class="modal-box confirm-modal-box" role="dialog" aria-modal="true" aria-labelledby="confirmSavedListTitle">
+      <div class="modal-header">
+        <h4 id="confirmSavedListTitle">Use saved list?</h4>
+      </div>
+      <div class="modal-body">
+        <p id="confirmSavedListMessage"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn-no" id="cancelSavedListBtn">No</button>
+          <button type="button" class="btn-yes" id="confirmSavedListBtn">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="popup" id="confirmPopup">
     <p>Do you wish to continue with the selected products for comparison?</p>
     <div class="popup-buttons">
