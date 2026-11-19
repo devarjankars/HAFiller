@@ -1846,11 +1846,11 @@ left: 5vw;
 
 #brandSort {
   appearance: none;
-  min-width: 16.125rem;
+  width: 16.125rem;
   min-height: 2.75rem;
   padding-inline: 1.375rem 2.75rem;
   color: var(--color-text-main);
-  font-size: 1.125rem;
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
 }
 
 #brandSort:focus-visible {
