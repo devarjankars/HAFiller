@@ -4353,6 +4353,10 @@ position: fixed;
   color: var(--color-text-main);
 }
 
+#brandSort:open + .ps-sort-chevron {
+  transform: rotate(180deg);
+}
+
 /* ── Stats bar ───────────────────────────────────────── */
 .ps-stats-bar {
   display: flex;
