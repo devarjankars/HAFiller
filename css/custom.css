@@ -1845,11 +1845,12 @@ left: 5vw;
 }
 
 #brandSort {
-  appearance: none;
-  padding-inline-end: 2rem;
+  border: 0;
+  padding-inline-end: 0.5rem;
+  background: transparent;
 }
 
-#brandSort:focus-visible {
+.ps-sort-select-wrap:has(#brandSort:focus-visible) {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
 }
@@ -4318,9 +4319,12 @@ position: fixed;
 }
 
 .ps-sort-select-wrap {
-  position: relative;
   display: flex;
   align-items: center;
+  padding-inline-end: 0.5rem;
+  border: 1px solid var(--color-stroke);
+  border-radius: 50px;
+  background: #F3F4F6;
 }
 
 .ps-sort-select {
