@@ -4078,7 +4078,7 @@ position: fixed;
   border-radius: 50px;
   padding: 0.35rem 1rem;
   font-family: "Roboto", sans-serif;
-  font-size: clamp(1rem, 1.08vw, 1.12rem);
+  font-size: clamp(1rem, 1.05vw, 1.1rem);
   cursor: pointer;
   color: var(--color-text-main);
   transition: background 0.2s;
