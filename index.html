@@ -864,10 +864,13 @@
             </div>
             <div style="display:flex;align-items:center;gap:0.8rem;">
               <label for="brandSort" style="font-size:14px;font-weight:500;">Sort by</label>
-              <select class="sort-select" id="brandSort">
-                <option value="asc">Alphabetical Asc. (A – Z)</option>
-                <option value="desc">Alphabetical Desc. (Z – A)</option>
-              </select>
+              <div class="ps-sort-select-wrap">
+                <select class="sort-select" id="brandSort">
+                  <option value="asc">Alphabetical Asc. (A – Z)</option>
+                  <option value="desc">Alphabetical Desc. (Z – A)</option>
+                </select>
+                <span class="ps-sort-chevron" aria-hidden="true">▾</span>
+              </div>
             </div>
           </div>
 

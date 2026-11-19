@@ -1844,6 +1844,16 @@ left: 5vw;
   outline: none;
 }
 
+#brandSort {
+  appearance: none;
+  padding-inline-end: 2rem;
+}
+
+#brandSort:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
 /* Brand filter list */
 .brand-filters {}
 
