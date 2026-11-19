@@ -833,7 +833,8 @@
             <div class="modal-box confirm-modal-box">
               <div class="modal-header">
                 <h4>Confirm</h4>
-                <button class="modal-close" onclick="closeModal('confirmClearAllModal')">&#10005;</button>
+                <button type="button" class="modal-close" aria-label="Close"
+                  onclick="closeModal('confirmClearAllModal')">&#10005;</button>
               </div>
               <div class="modal-body">
                 <p style="font-size:1.1rem;">This will clear all selected products. Do you want to continue?</p>
@@ -902,7 +903,10 @@
                 <button type="button" id="savedListToggle" class="saved-list-toggle sort-select"
                   aria-haspopup="true" aria-expanded="false" aria-controls="savedListMenu">
                   <span id="savedListToggleLabel">Saved list</span>
-                  <span aria-hidden="true">▾</span>
+                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
+                    <path d="M1.5 1.5L7 6L12.5 1.5" stroke="currentColor" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
                 </button>
                 <div class="saved-list-menu" id="savedListMenu" role="menu" hidden></div>
               </div>
@@ -1589,7 +1593,8 @@
     <div class="modal-box" style="max-width:900px;">
       <div class="modal-header">
         <h4>References</h4>
-        <button class="modal-close" onclick="closeModal('referencesModal')"><svg width="44" height="44"
+        <button type="button" class="modal-close" aria-label="Close"
+          onclick="closeModal('referencesModal')"><svg width="44" height="44" aria-hidden="true"
             viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M29.0657 16.2323L23.298 22L29.0657 27.7677C29.4232 28.1252 29.4232 28.7063 29.0657 29.0638C28.886 29.2435 28.6513 29.3315 28.4167 29.3315C28.182 29.3315 27.9473 29.2417 27.7677 29.0638L22 23.2962L16.2323 29.0638C16.0527 29.2435 15.818 29.3315 15.5833 29.3315C15.3487 29.3315 15.114 29.2417 14.9343 29.0638C14.5768 28.7063 14.5768 28.1252 14.9343 27.7677L20.702 22L14.9343 16.2323C14.5768 15.8748 14.5768 15.2937 14.9343 14.9362C15.2918 14.5787 15.873 14.5787 16.2305 14.9362L21.9982 20.7038L27.7658 14.9362C28.1233 14.5787 28.7045 14.5787 29.062 14.9362C29.4195 15.2937 29.4195 15.8748 29.062 16.2323H29.0657ZM44 22C44 34.1312 34.1312 44 22 44C9.86883 44 0 34.1312 0 22C0 9.86883 9.86883 0 22 0C34.1312 0 44 9.86883 44 22ZM42.1667 22C42.1667 10.8808 33.1192 1.83333 22 1.83333C10.8808 1.83333 1.83333 10.8808 1.83333 22C1.83333 33.1192 10.8808 42.1667 22 42.1667C33.1192 42.1667 42.1667 33.1192 42.1667 22Z"

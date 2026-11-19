@@ -29,6 +29,7 @@ function showView(viewId) {
   if (viewId !== 'app') {
     closeRheologyPopups();
     resetOverviewVideos();
+    resetCohesivityScroll();
   }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(viewId);
@@ -54,6 +55,11 @@ function resetOverviewVideos() {
 
 function resetVideo(video) {
   if (!video.paused || video.currentTime > 0) video.load();
+}
+
+function resetCohesivityScroll() {
+  const content = document.querySelector('#rheology-content .rheo-card-scroll-content');
+  if (content) content.scrollTop = 0;
 }
 
 function switchOverviewPage(pageNumber) {
@@ -247,6 +253,7 @@ function switchManufacturingDetail(button, panelId) {
 function showSection(id, event) {
   closeRheologyPopups();
   if (id !== 'mechanical') resetOverviewVideos();
+  if (id !== 'rheology-content') resetCohesivityScroll();
   // 1. Hide all content sections
   document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
 
@@ -474,6 +481,9 @@ function closeRheologyPopups() {
  */
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
+  modal?.querySelectorAll(':is(#referencesModal, #confirmClearAllModal) .modal-body, #rheologyInfoModal .rheology-popup-body').forEach(body => {
+    body.scrollTop = 0;
+  });
   if (modal) modal.classList.remove('open');
   modal?.querySelectorAll('video').forEach(resetVideo);
   // Only remove modal-open if no other modals are open
@@ -493,6 +503,10 @@ function closeModal(modalId) {
     physicochemicalModalTrigger = null;
   }
 }
+
+document.addEventListener('dragstart', event => {
+  if (event.target instanceof HTMLImageElement) event.preventDefault();
+});
 
 // Escape closes fullscreen views, but modal dialogs stay open until dismissed explicitly.
 document.addEventListener('keydown', function (e) {

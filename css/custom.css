@@ -830,6 +830,10 @@ font-size: clamp(0.875rem, 2vw, 1.313rem);
   font-weight: 400;
 }
 
+#rheologyInfoModal .rheology-popup-header {
+  border-bottom: 1px solid var(--color-stroke);
+}
+
 .rheology-popup-body {
   min-height: 0;
   overflow-y: auto;
@@ -2041,10 +2045,6 @@ font-size: 14px;
 
 #graphContainer.filler-pane-open #GoBack {
   order: 0;
-  min-height: 52px;
-  padding: 0.6rem 1.25rem;
-  border-color: var(--color-brand-border);
-  font-size: clamp(1rem, 1.35vw, 1.25rem);
 }
 
 #graphContainer.filler-pane-open .filler-tabs {
@@ -3763,6 +3763,21 @@ position: absolute;
   padding: 0 0.25rem;
 }
 
+:is(#referencesModal, #confirmClearAllModal) .modal-close {
+  display: grid;
+  min-width: 2rem;
+  min-height: 2rem;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+}
+
+:is(#referencesModal, #confirmClearAllModal) .modal-close:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
 .modal-body {
   padding: 1.25rem 1.5rem;
   overflow-y: auto;
@@ -4054,13 +4069,16 @@ position: fixed;
 .go-back-btn {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 8.125rem;
+  min-height: 2.75rem;
   background: transparent;
-  border: 1.5px solid var(--color-stroke);
+  border: 1px solid var(--color-stroke);
   border-radius: 50px;
   padding: 0.35rem 1rem;
   font-family: "Roboto", sans-serif;
-  font-size: 14px;
+  font-size: clamp(1rem, 1.32vw, 1.125rem);
   cursor: pointer;
   color: var(--color-text-main);
   transition: background 0.2s;
@@ -4358,6 +4376,14 @@ position: fixed;
 }
 
 #brandSort:open + .ps-sort-chevron {
+  transform: rotate(180deg);
+}
+
+.saved-list-toggle svg {
+  flex: none;
+}
+
+.saved-list-toggle[aria-expanded="true"] svg {
   transform: rotate(180deg);
 }
 
