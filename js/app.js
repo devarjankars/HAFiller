@@ -475,17 +475,25 @@ function closeRheologyPopups() {
   document.querySelectorAll('.rheology-modal-overlay.open').forEach(modal => closeModal(modal.id));
 }
 
+function resetPopupScroll(popup) {
+  for (const element of [popup, ...popup.querySelectorAll('*')]) {
+    if (element.scrollTop || element.scrollLeft) {
+      element.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }
+}
+
 /**
  * Close a modal overlay by ID.
  * @param {string} modalId
  */
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
-  modal?.querySelectorAll(':is(#referencesModal, #confirmClearAllModal) .modal-body, #rheologyInfoModal .rheology-popup-body').forEach(body => {
-    body.scrollTop = 0;
-  });
-  if (modal) modal.classList.remove('open');
-  modal?.querySelectorAll('video').forEach(resetVideo);
+  if (modal) {
+    resetPopupScroll(modal);
+    modal.classList.remove('open');
+    modal.querySelectorAll('video').forEach(resetVideo);
+  }
   // Only remove modal-open if no other modals are open
   const anyOpen = document.querySelector('.modal-overlay.open, .popup.open');
   if (!anyOpen) document.body.classList.remove('modal-open');
@@ -609,6 +617,7 @@ function closeFullscreen() {
   const content = document.getElementById('fullscreenContent');
   if (!modal) return;
 
+  if (modal.classList.contains('open')) resetPopupScroll(modal);
   fullscreenElements?.forEach(({ element, parent, placeholder }) => {
     if (placeholder.parentNode) {
       placeholder.replaceWith(element);
