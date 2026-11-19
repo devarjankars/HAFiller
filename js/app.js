@@ -380,7 +380,7 @@ function switchFillerTab(btn, tabId) {
   if (pane) pane.classList.add('active');
   document.getElementById('graphContainer')?.classList.add('filler-pane-open');
   document.querySelector('.filler-body').style.display = "none";
-  document.getElementById('GoBack').style.display = "block";
+  document.getElementById('GoBack').style.display = "";
   // Re-render / resize charts when their tab becomes visible
   // (canvas has 0 dimensions while the pane is hidden)
   setTimeout(() => {

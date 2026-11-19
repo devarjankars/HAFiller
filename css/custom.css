@@ -4070,6 +4070,10 @@ position: fixed;
   background: #f5f5f5;
 }
 
+.go-back-arrow {
+  flex: none;
+}
+
 /* Edit products option */
 .edit-option {
   display: flex;
