@@ -466,9 +466,30 @@ function switchGraphTable(mode, inFullscreen = false) {
  */
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
-  if (modal) modal.classList.add('open');
-  document.body.classList.add('modal-open');
-  
+  if (!modal) return;
+  modal.classList.add('open');
+  syncPopupScrollLock();
+}
+
+let popupPageScrollY = 0;
+
+function syncPopupScrollLock() {
+  const root = document.documentElement;
+  const body = document.body;
+  const hasPopup = Boolean(document.querySelector('.modal-overlay.open, .popup.open, .fullscreen-modal.open'));
+  if (hasPopup === body.classList.contains('modal-open')) return;
+
+  if (hasPopup) {
+    popupPageScrollY = window.scrollY;
+    body.style.setProperty('--popup-lock-scroll', `-${popupPageScrollY}px`);
+    root.classList.add('modal-open');
+    body.classList.add('modal-open');
+  } else {
+    body.classList.remove('modal-open');
+    root.classList.remove('modal-open');
+    body.style.removeProperty('--popup-lock-scroll');
+    window.scrollTo({ top: popupPageScrollY, behavior: 'instant' });
+  }
 }
 
 function closeRheologyPopups() {
@@ -494,20 +515,18 @@ function closeModal(modalId) {
     modal.classList.remove('open');
     modal.querySelectorAll('video').forEach(resetVideo);
   }
-  // Only remove modal-open if no other modals are open
-  const anyOpen = document.querySelector('.modal-overlay.open, .popup.open');
-  if (!anyOpen) document.body.classList.remove('modal-open');
+  syncPopupScrollLock();
 
   if (modalId === 'manufacturingInfoModal' && manufacturingModalTrigger instanceof HTMLElement) {
-    manufacturingModalTrigger.focus();
+    manufacturingModalTrigger.focus({ preventScroll: true });
     manufacturingModalTrigger = null;
   }
   if (modalId === 'rheologyInfoModal' && rheologyModalTrigger instanceof HTMLElement) {
-    rheologyModalTrigger.focus();
+    rheologyModalTrigger.focus({ preventScroll: true });
     rheologyModalTrigger = null;
   }
   if (modalId === 'physicochemicalInfoModal' && physicochemicalModalTrigger instanceof HTMLElement) {
-    physicochemicalModalTrigger.focus();
+    physicochemicalModalTrigger.focus({ preventScroll: true });
     physicochemicalModalTrigger = null;
   }
 }
@@ -609,6 +628,7 @@ function openFullscreen() {
   if (chart) chart.stop();
   content.replaceChildren(...elements.map(({ element }) => element));
   modal.classList.add('open');
+  syncPopupScrollLock();
   switchGraphTable(graphEl.style.display === 'none' ? 'table' : 'graph', true);
 }
 
@@ -628,6 +648,7 @@ function closeFullscreen() {
   fullscreenElements = null;
   content?.replaceChildren();
   modal.classList.remove('open');
+  syncPopupScrollLock();
   resizeScatterChart(true);
 }
 
@@ -878,9 +899,10 @@ document.addEventListener('DOMContentLoaded', () => {
       playButton.hidden = true;
       if (video.classList.contains('overview-video')) {
         const main = video.closest('.main-content').getBoundingClientRect();
+        const header = document.querySelector('.sideBarmobileheader').getBoundingClientRect();
         const footer = document.querySelector('#mechanical > .overview-footer').getBoundingClientRect();
         const frame = player.getBoundingClientRect();
-        const top = Math.max(0, main.top);
+        const top = Math.max(0, main.top, header.bottom);
         const bottom = Math.min(window.innerHeight, main.bottom, footer.top);
         if (frame.top < top || frame.bottom > bottom) {
           player.scrollIntoView({ block: 'center', inline: 'nearest' });

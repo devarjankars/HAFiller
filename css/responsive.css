@@ -448,6 +448,27 @@
         overflow: hidden;
     }
 
+    html.modal-open {
+        overflow: hidden;
+        overscroll-behavior: none;
+    }
+
+    body.modal-open {
+        position: fixed;
+        inset: var(--popup-lock-scroll) 0 auto;
+        width: 100%;
+    }
+
+    .modal-body,
+    .rheology-popup-body,
+    .manufacturing-modal-content {
+        overscroll-behavior: contain;
+    }
+
+    .video-player > .video-play-overlay {
+        display: none;
+    }
+
     body.sidebar-open {
         position: fixed;
         top: var(--sidebar-lock-scroll);
