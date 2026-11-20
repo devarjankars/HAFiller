@@ -6566,7 +6566,7 @@ function renderLiftCapacityChart(selectedProducts) {
           position: "bottom",
           labels: {
             usePointStyle: true,
-            padding: 30,
+            padding: 10,
             generateLabels: function (chart) {
               const datasets = chart.data.datasets;
 
@@ -6722,7 +6722,7 @@ function renderExtrusionChart(selectedProducts) {
             },
             boxWidth: 12,
             boxHeight: 12,
-            padding: 30,
+            padding: 10,
           },
         },
       },
@@ -7282,7 +7282,7 @@ function renderChartsForSelected() {
             },
             boxWidth: 12,
             boxHeight: 12,
-            padding: 20
+            padding: 10
           }
         },
         datalabels: {

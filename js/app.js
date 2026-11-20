@@ -37,6 +37,7 @@ function showView(viewId) {
 
   // Close mobile sidebar when navigating
   closeMobileSidebar();
+  if (viewId === 'home') window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 /**
@@ -70,6 +71,7 @@ function switchOverviewPage(pageNumber) {
   }
 
   if (pageNumber !== 1) resetOverviewVideos();
+  const pageChanged = targetPage.hidden;
 
   document.querySelectorAll('.overview-page').forEach(page => {
     page.hidden = page !== targetPage;
@@ -89,6 +91,7 @@ function switchOverviewPage(pageNumber) {
   const nextButton = document.querySelector('[data-overview-next]');
   if (previousButton) previousButton.disabled = pageNumber === 1;
   if (nextButton) nextButton.disabled = pageNumber === 2;
+  if (pageChanged) resetSectionScroll(targetPage);
 }
 
 function switchManufacturingPage(pageNumber) {
@@ -99,6 +102,7 @@ function switchManufacturingPage(pageNumber) {
     return;
   }
 
+  const pageChanged = targetPage.hidden;
   section.querySelectorAll('.manufacturing-page').forEach(page => {
     page.hidden = page !== targetPage;
   });
@@ -115,6 +119,7 @@ function switchManufacturingPage(pageNumber) {
   const nextButton = section.querySelector('[data-manufacturing-next]');
   if (previousButton) previousButton.disabled = pageNumber === 1;
   if (nextButton) nextButton.disabled = pageNumber === section.querySelectorAll('.manufacturing-page').length;
+  if (pageChanged) resetSectionScroll(targetPage);
 }
 
 function switchOverviewStressTab(button, panelId) {
@@ -125,6 +130,7 @@ function switchOverviewStressTab(button, panelId) {
     return;
   }
 
+  const panelChanged = panel.hidden;
   tabs.querySelectorAll('[role="tab"]').forEach(tab => {
     const isActive = tab === button;
     tab.classList.toggle('active', isActive);
@@ -135,6 +141,7 @@ function switchOverviewStressTab(button, panelId) {
     stressPanel.classList.toggle('active', isActive);
     stressPanel.hidden = !isActive;
   });
+  if (panelChanged) resetSectionScroll(panel);
 }
 
 let manufacturingModalTrigger = null;
@@ -208,11 +215,13 @@ function openManufacturingPopup(panelId, trigger) {
 
 function switchManufacturingTopic(button, panelId) {
   const modal = document.getElementById('manufacturingInfoModal');
-  if (!modal || !modal.querySelector(`#${panelId}`)) {
+  const targetPanel = modal?.querySelector(`#${panelId}`);
+  if (!targetPanel) {
     console.error(`Manufacturing topic panel could not be found: ${panelId}`);
     return;
   }
 
+  const panelChanged = targetPanel.hidden;
   modal.querySelectorAll('.manufacturing-topic-tab').forEach(tab => {
     const isActive = tab === button;
     tab.classList.toggle('active', isActive);
@@ -221,15 +230,18 @@ function switchManufacturingTopic(button, panelId) {
   modal.querySelectorAll('.manufacturing-topic-panel').forEach(panel => {
     panel.hidden = panel.id !== panelId;
   });
+  if (panelChanged) resetScrollPositions(modal.querySelector('.manufacturing-modal-content'));
 }
 
 function switchManufacturingDetail(button, panelId) {
   const topicPanel = button.closest('.manufacturing-topic-panel');
-  if (!topicPanel || !topicPanel.querySelector(`#${panelId}`)) {
+  const targetPanel = topicPanel?.querySelector(`#${panelId}`);
+  if (!targetPanel) {
     console.error(`Manufacturing detail panel could not be found: ${panelId}`);
     return;
   }
 
+  const panelChanged = targetPanel.hidden;
   topicPanel.querySelectorAll('.manufacturing-subtab').forEach(tab => {
     const isActive = tab === button;
     tab.classList.toggle('active', isActive);
@@ -238,6 +250,7 @@ function switchManufacturingDetail(button, panelId) {
   topicPanel.querySelectorAll('.manufacturing-detail-panel').forEach(panel => {
     panel.hidden = panel.id !== panelId;
   });
+  if (panelChanged) resetScrollPositions(topicPanel.closest('.manufacturing-modal-content'));
 }
 
 
@@ -263,6 +276,9 @@ function showSection(id, event) {
   if (id === 'mechanical') switchOverviewPage(1);
   if (id === 'properties-content') switchManufacturingPage(1);
   if (id === 'FillerSelection' && typeof syncFaceMarkerSize === 'function') {
+    const defaultArea = target.querySelector('.bodypartcontainer[data-img="1"]');
+    if (!defaultArea.classList.contains('active')) defaultArea.click();
+    target.querySelector('#mobile-region-preview').hidden = true;
     syncFaceMarkerSize();
   }
 
@@ -296,6 +312,7 @@ if (id === "product-selection") {
 
   // 7. Close mobile sidebar after navigating
   closeMobileSidebar();
+  if (target) resetSectionScroll(target);
 }
 
 /**
@@ -379,15 +396,20 @@ function switchTab(btn, tabId) {
  * @param {string} tabId - 'lift' | 'extrusion' | 'tissue'
  */
 function switchFillerTab(btn, tabId) {
+  const pane = document.getElementById('pane-' + tabId);
+  const paneChanged = pane && !pane.classList.contains('active');
   document.querySelectorAll('.filler-tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
   document.querySelectorAll('#fillerTabsContent .tab-pane').forEach(p => p.classList.remove('active'));
-  const pane = document.getElementById('pane-' + tabId);
   if (pane) pane.classList.add('active');
   document.getElementById('graphContainer')?.classList.add('filler-pane-open');
   document.querySelector('.filler-body').style.display = "none";
   document.getElementById('GoBack').style.display = "";
+  if (paneChanged) {
+    if (tabId === 'tissue') document.getElementById('week1').click();
+    resetSectionScroll(pane);
+  }
   // Re-render / resize charts when their tab becomes visible
   // (canvas has 0 dimensions while the pane is hidden)
   setTimeout(() => {
@@ -496,8 +518,14 @@ function closeRheologyPopups() {
   document.querySelectorAll('.rheology-modal-overlay.open').forEach(modal => closeModal(modal.id));
 }
 
-function resetPopupScroll(popup) {
-  for (const element of [popup, ...popup.querySelectorAll('*')]) {
+function resetSectionScroll(section) {
+  section.closest('.main-content')?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  resetScrollPositions(section);
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+}
+
+function resetScrollPositions(container) {
+  for (const element of [container, ...container.querySelectorAll('*')]) {
     if (element.scrollTop || element.scrollLeft) {
       element.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
@@ -511,7 +539,7 @@ function resetPopupScroll(popup) {
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
-    resetPopupScroll(modal);
+    resetScrollPositions(modal);
     modal.classList.remove('open');
     modal.querySelectorAll('video').forEach(resetVideo);
   }
@@ -637,7 +665,7 @@ function closeFullscreen() {
   const content = document.getElementById('fullscreenContent');
   if (!modal) return;
 
-  if (modal.classList.contains('open')) resetPopupScroll(modal);
+  if (modal.classList.contains('open')) resetScrollPositions(modal);
   fullscreenElements?.forEach(({ element, parent, placeholder }) => {
     if (placeholder.parentNode) {
       placeholder.replaceWith(element);
