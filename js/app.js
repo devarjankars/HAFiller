@@ -840,6 +840,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show the home view by default
   showView('home');
 
+  document.querySelectorAll('#home .home-card').forEach(card => {
+    card.addEventListener('pointerdown', event => {
+      if (event.pointerType === 'touch' && !card.disabled) card.classList.add('is-pressed');
+    });
+    const release = () => card.classList.remove('is-pressed');
+    card.addEventListener('pointerup', release);
+    card.addEventListener('pointercancel', release);
+  });
+
   const phoneLandscapeQuery = window.matchMedia(
     '(orientation: landscape) and (max-width: 950px)'
   );

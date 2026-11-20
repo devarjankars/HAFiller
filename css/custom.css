@@ -4213,6 +4213,20 @@ position: fixed;
   box-shadow: 0 8px 32px rgba(179, 91, 109, 0.15);
 }
 
+@media (hover: none) and (pointer: coarse) {
+  #home .home-card.is-pressed {
+    transform: scale(0.985);
+    box-shadow: inset 0 0 0 2px rgb(179 91 109 / 22%);
+    transition: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: reduce) {
+  #home .home-card.is-pressed {
+    transform: none;
+  }
+}
+
 .home-card img {
   width: 52px;
   height: 52px;
