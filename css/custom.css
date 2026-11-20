@@ -1850,7 +1850,7 @@ left: 5vw;
 
 #brandSort {
   appearance: none;
-  width: 16.125rem;
+  width: 16.1rem;
   min-height: 2.75rem;
   padding-inline: 1.375rem 2.75rem;
   color: var(--color-text-main);
@@ -4076,9 +4076,9 @@ position: fixed;
   background: transparent;
   border: 1px solid var(--color-stroke);
   border-radius: 50px;
-  padding: 0.35rem 1rem;
+  padding: 0.3rem 0.8rem;
   font-family: "Roboto", sans-serif;
-  font-size: clamp(1rem, 1.05vw, 1.1rem);
+  font-size: clamp(0.9rem, 1vw, 0.9rem);
   cursor: pointer;
   color: var(--color-text-main);
   transition: background 0.2s;
