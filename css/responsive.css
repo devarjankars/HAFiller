@@ -425,7 +425,7 @@
         z-index: 450;
         transform: translateX(-110%);
         height: calc(100vh - var(--mobile-header-height));
-        height: calc(100svh - var(--mobile-header-height));
+        height: calc(100dvh - var(--mobile-header-height));
         width: min(88vw, 360px);
         border-radius: 0 12px 12px 0;
         padding: 1rem 0 !important;

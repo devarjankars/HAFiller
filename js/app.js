@@ -905,8 +905,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
     video.addEventListener('play', () => {
+      if (video.paused) return;
       playButton.hidden = true;
       if (video.classList.contains('overview-video')) {
+        document.querySelectorAll('.overview-video').forEach(other => {
+          if (other !== video) other.pause();
+        });
         const main = video.closest('.main-content').getBoundingClientRect();
         const header = document.querySelector('.sideBarmobileheader').getBoundingClientRect();
         const footer = document.querySelector('#mechanical > .overview-footer').getBoundingClientRect();
