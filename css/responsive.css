@@ -323,7 +323,6 @@
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.6rem;
-        overflow: visible;
         margin: 4.2rem 0 1rem;
     }
 
@@ -2289,7 +2288,6 @@
     .manufacturing-topic-tabs {
         gap: 0.75rem;
         margin-bottom: 0;
-        scrollbar-width: thin;
     }
 
     .manufacturing-topic-tab {
@@ -2298,6 +2296,10 @@
         border-radius: 12px;
         background: #ececec;
         font-size: var(--manufacturing-copy-size);
+    }
+
+    .manufacturing-topic-tab[data-manufacturing-group="crosslinking"] {
+        padding-inline: clamp(0.875rem, 1.76vw, 1.375rem);
     }
 
     .manufacturing-topic-tab.active {
