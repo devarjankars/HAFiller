@@ -1195,6 +1195,20 @@
     </form>
   </div>
 
+  <dialog class="modal-box confirm-modal-box" id="duplicateSavedSelection"
+    aria-labelledby="duplicateSavedSelectionTitle" aria-describedby="duplicateSavedSelectionMessage">
+    <div class="modal-header">
+      <h4 id="duplicateSavedSelectionTitle">Replace saved selection?</h4>
+    </div>
+    <form class="modal-body" method="dialog">
+      <p id="duplicateSavedSelectionMessage"></p>
+      <div class="modal-actions">
+        <button type="submit" class="btn-no" value="keep" autofocus>Keep existing</button>
+        <button type="submit" class="btn-yes" value="replace">Replace</button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="modal-overlay manufacturing-modal-overlay" id="manufacturingInfoModal">
     <section class="manufacturing-modal" role="dialog" aria-modal="true" aria-labelledby="manufacturing-modal-title">
       <div class="manufacturing-modal-header">

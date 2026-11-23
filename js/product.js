@@ -6052,7 +6052,7 @@ function openSaveSelectionModal() {
   if (nameInput) nameInput.focus({ preventScroll: true });
 }
 
-function saveCurrentSelection(event) {
+async function saveCurrentSelection(event) {
   event.preventDefault();
 
   const nameInput = document.getElementById("savedSelectionName");
@@ -6088,10 +6088,16 @@ function saveCurrentSelection(event) {
     (list) => areSavedSelectionsEqual(list.selection, selection)
   );
   if (existingList) {
-    const message = existingListByName
-      ? `A saved list named "${existingList.name}" already exists. Overwrite it?`
-      : `This selection is already saved as "${existingList.name}". Overwrite it with the name "${name}"?`;
-    if (!window.confirm(message)) return;
+    const dialog = document.getElementById("duplicateSavedSelection");
+    document.getElementById("duplicateSavedSelectionMessage").textContent = existingListByName
+      ? `A list named “${existingList.name}” already exists. Replace it with your current selection?`
+      : `These products are already saved as “${existingList.name}”. Replace that list with “${name}”?`;
+    dialog.returnValue = "keep";
+    const choice = new Promise((resolve) =>
+      dialog.addEventListener("close", () => resolve(dialog.returnValue), { once: true })
+    );
+    dialog.showModal();
+    if (await choice !== "replace") return;
   }
 
   const savedName = existingListByName ? existingList.name : name;
@@ -6144,6 +6150,13 @@ function loadSavedList(savedList) {
 function clearAllProducts() {
   brands.forEach((brand) => state.selected[brand.brand].clear());
   refreshProductSelection();
+}
+
+function resetProductSelection() {
+  state.activeBrand = "All";
+  sectionsDiv.style.display = "none";
+  closeSavedListDropdown();
+  clearAllProducts();
 }
 
 function refreshProductSelection() {

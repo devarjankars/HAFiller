@@ -27,8 +27,8 @@
  */
 function showView(viewId) {
   if (viewId === 'home' && document.getElementById('app').classList.contains('active') &&
-      typeof clearAllProducts === 'function' && getTotalSelectedCount() > 0) {
-    clearAllProducts();
+      typeof resetProductSelection === 'function') {
+    resetProductSelection();
   }
   if (viewId !== 'app') {
     closeRheologyPopups();
@@ -268,6 +268,10 @@ function switchManufacturingDetail(button, panelId) {
  * @param {Event|null} event - originating click event (may be null)
  */
 function showSection(id, event) {
+  if (id !== 'product-selection' && id !== 'graphContainer' &&
+      document.querySelector('#product-selection.active, #graphContainer.active')) {
+    resetProductSelection();
+  }
   closeRheologyPopups();
   if (id !== 'mechanical') resetOverviewVideos();
   if (id !== 'rheology-content') resetCohesivityScroll();
