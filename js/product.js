@@ -6095,6 +6095,7 @@ async function saveCurrentSelection(event) {
   );
   if (existingList) {
     const dialog = document.getElementById("duplicateSavedSelection");
+    dialog.style.setProperty("--save-dialog-height", `${event.currentTarget.offsetHeight}px`);
     document.getElementById("duplicateSavedSelectionMessage").textContent = existingListByName
       ? `A list named “${existingList.name}” already exists. Replace it with your current selection?`
       : `These products are already saved as “${existingList.name}”. Replace that list with “${name}”?`;

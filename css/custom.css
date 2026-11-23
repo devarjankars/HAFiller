@@ -2250,7 +2250,8 @@ th {
   font-weight: 500;
 }
 
-#tableContainer th {
+#tableContainer th,
+#tableContainer td:not(:first-child) {
   text-align: center;
 }
 
@@ -3034,7 +3035,15 @@ th {
   position: fixed;
   inset: 0;
   margin: auto;
+  width: calc((100% - 2rem) * 0.92);
+  min-height: min(var(--save-dialog-height, 0px), calc(100dvh - 2rem));
   color: var(--color-text-main);
+}
+
+#duplicateSavedSelection .modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
 }
 
 #duplicateSavedSelection:not([open]) {
@@ -4722,6 +4731,14 @@ position: fixed;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+#brand-sections .brand-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-block: 0.5rem;
+  background: #fff;
 }
 
 .subhead {
