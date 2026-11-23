@@ -917,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateOrientationLock();
 
   const tabletVideoPreview = window.matchMedia(
-    '(orientation: landscape) and (min-width: 951px) and (max-width: 1366px) and (any-pointer: coarse)'
+    '(min-width: 951px) and (any-pointer: coarse)'
   );
   const phoneVideoPreview = window.matchMedia('(max-width: 599px) and (orientation: portrait)');
 
