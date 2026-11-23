@@ -2273,6 +2273,205 @@
     }
 }
 
+@media (min-width: 951px) {
+    .manufacturing-modal {
+        --manufacturing-gutter: clamp(1.25rem, 2.93vw, 2.5rem);
+        --manufacturing-copy-size: clamp(0.875rem, 1.2vw, 1.0625rem);
+        max-height: calc(100vh - 3rem);
+        max-height: calc(100dvh - 3rem);
+        border-radius: 24px;
+    }
+
+    .manufacturing-modal-header {
+        padding: 1.5rem calc(var(--manufacturing-gutter) - 0.75rem) 1.25rem var(--manufacturing-gutter);
+    }
+
+    .manufacturing-topic-tabs {
+        gap: 0.75rem;
+        margin-bottom: 0;
+        scrollbar-width: thin;
+    }
+
+    .manufacturing-topic-tab {
+        min-height: 3rem;
+        padding: 0.55rem clamp(0.875rem, 1.76vw, 1.5rem);
+        border-radius: 12px;
+        background: #ececec;
+        font-size: var(--manufacturing-copy-size);
+    }
+
+    .manufacturing-topic-tab.active {
+        background: var(--color-brand);
+    }
+
+    .manufacturing-modal-close {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+        margin-bottom: 0;
+        border-color: currentColor;
+    }
+
+    .manufacturing-modal-close svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .manufacturing-modal-content {
+        padding: 1.75rem var(--manufacturing-gutter) 2rem;
+    }
+
+    .manufacturing-subtabs {
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .manufacturing-subtab {
+        padding-block: 0.5rem 0.65rem;
+        font-size: var(--manufacturing-copy-size);
+    }
+
+    .manufacturing-subtab.active {
+        font-weight: 500;
+    }
+
+    .manufacturing-detail-panel,
+    .molecular-weight-content,
+    .uncrosslinked-content {
+        gap: 1.5rem;
+    }
+
+    .manufacturing-info-card,
+    .crosslinking-points-card {
+        padding: clamp(1rem, 1.76vw, 1.5rem);
+        border-color: #d9d9d9;
+        border-radius: 16px;
+        background: #f7f7f7;
+    }
+
+    .manufacturing-info-card,
+    .molecular-weight-points,
+    .uncrosslinked-points,
+    .crosslinking-points {
+        font-size: var(--manufacturing-copy-size);
+        line-height: 1.5;
+    }
+
+    .manufacturing-info-card p,
+    .molecular-weight-copy li,
+    .uncrosslinked-points > li,
+    .crosslinking-points {
+        padding-left: 1.25rem;
+    }
+
+    .manufacturing-info-card p::before,
+    .molecular-weight-copy .molecular-weight-points > li::before,
+    .uncrosslinked-points > li::before {
+        width: 6px;
+        height: 6px;
+    }
+
+    .molecular-weight-copy ul ul > li,
+    .uncrosslinked-points ul li,
+    .crosslinking-points ul li {
+        padding-left: 1.5rem;
+    }
+
+    .manufacturing-info-card ul,
+    .molecular-weight-copy ul ul,
+    .uncrosslinked-points ul,
+    .crosslinking-points ul {
+        margin-top: 0.85rem;
+    }
+
+    .manufacturing-info-card ul {
+        margin-left: 2.25rem;
+    }
+
+    .manufacturing-info-card li + li,
+    .crosslinking-points > li + li,
+    .crosslinking-points ul li + li {
+        margin-top: 0.85rem;
+    }
+
+    .molecular-weight-content {
+        grid-template-columns: minmax(0, 1.84fr) minmax(0, 1fr);
+    }
+
+    .molecular-weight-copy {
+        padding: 1rem 0;
+    }
+
+    .molecular-weight-points,
+    .uncrosslinked-points {
+        gap: 0.85rem;
+    }
+
+    .molecular-weight-figure {
+        padding: 1.25rem;
+        border-radius: 16px;
+    }
+
+    .molecular-weight-figure figcaption {
+        margin-top: 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .molecular-weight-figure figcaption i {
+        display: inline-block;
+        margin-top: 0.65rem;
+    }
+
+    .uncrosslinked-title {
+        margin-bottom: 1.4rem;
+        font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    }
+
+    .uncrosslinked-content {
+        grid-template-columns: minmax(0, 1.46fr) minmax(0, 1fr);
+    }
+
+    .uncrosslinked-copy {
+        padding: 0;
+    }
+
+    .uncrosslinked-points {
+        font-size: clamp(0.875rem, 1.18vw, 1rem);
+        line-height: 1.45;
+    }
+
+    .crosslinking-process {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 114px) minmax(0, 1fr);
+        gap: clamp(1rem, 2.93vw, 2.5rem);
+        max-width: 614px;
+        margin-top: 1.5rem;
+    }
+
+    .crosslinking-process-item img {
+        aspect-ratio: 210 / 189;
+        border-radius: 16px;
+    }
+
+    .crosslinking-process-item figcaption {
+        margin-top: 0.75rem;
+        font-size: var(--manufacturing-copy-size);
+    }
+
+    .manufacturing-modal .manufacturing-modal-footnote {
+        width: auto;
+        margin: 1.5rem 0 0;
+        font-size: 0.6875rem;
+    }
+
+    #source-of-ha-panel .manufacturing-modal-footnote {
+        margin-top: 0;
+    }
+
+    .manufacturing-modal .mechanical-properties-footnote {
+        margin-inline-start: 1rem;
+    }
+}
+
 /* Phone home and navigation reference. Tablet and desktop rules stay intact. */
 @media (max-width: 599px) and (orientation: portrait) {
     #physicochemicalInfoModal .physio-popup {
