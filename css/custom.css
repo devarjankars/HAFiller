@@ -2764,6 +2764,17 @@ th {
 
 #mechanical > .overview-footer > .overview-footnote {
   order: 1;
+  display: grid;
+}
+
+#mechanical [data-overview-footnote] {
+  grid-area: 1 / 1;
+}
+
+/* Reserve space for the taller reference block on both Overview pages. */
+#mechanical [data-overview-footnote][hidden] {
+  display: block;
+  visibility: hidden;
 }
 
 #mechanical > .overview-footer > .overview-pagination {
