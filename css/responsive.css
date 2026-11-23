@@ -465,10 +465,6 @@
         overscroll-behavior: contain;
     }
 
-    .video-player > .video-play-overlay {
-        display: none;
-    }
-
     body.sidebar-open {
         position: fixed;
         top: var(--sidebar-lock-scroll);
@@ -2503,8 +2499,7 @@
         object-fit: cover;
     }
 
-    #physicochemicalInfoModal .has-preview-play > .video-play-overlay:not([hidden]) {
-        display: grid;
+    #physicochemicalInfoModal .video-play-overlay {
         width: 48px;
         height: 48px;
     }

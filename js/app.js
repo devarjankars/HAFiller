@@ -916,9 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('orientationchange', updateOrientationLock);
   updateOrientationLock();
 
-  const tabletVideoPreview = window.matchMedia(
-    '(min-width: 951px) and (any-pointer: coarse)'
-  );
+  const touchVideoPreview = window.matchMedia('(any-pointer: coarse)');
   const phoneVideoPreview = window.matchMedia('(max-width: 599px) and (orientation: portrait)');
 
   document.querySelectorAll('video').forEach(video => {
@@ -939,17 +937,16 @@ document.addEventListener('DOMContentLoaded', () => {
       duration.className = 'video-preview-duration';
       duration.hidden = true;
       player.appendChild(duration);
-      phoneVideoPreview.addEventListener('change', updateVideoControls);
     }
 
     function updateVideoControls() {
-      const usePreview = tabletVideoPreview.matches || (duration && phoneVideoPreview.matches);
-      const showPreview = usePreview && video.paused && video.currentTime === 0 && !video.ended;
-      video.controls = !showPreview;
-      player.classList.toggle('has-preview-play', showPreview);
-      playButton.hidden = usePreview ? !showPreview : !video.paused && !video.ended;
+      const useCustomPlay = touchVideoPreview.matches || phoneVideoPreview.matches;
+      const showPlay = video.paused || video.ended;
+      video.controls = !useCustomPlay || !showPlay;
+      playButton.hidden = !showPlay;
       if (duration) {
-        duration.hidden = !showPreview || !Number.isFinite(video.duration);
+        duration.hidden = !useCustomPlay || !showPlay || video.currentTime !== 0 ||
+          video.ended || !Number.isFinite(video.duration);
         if (!duration.hidden) {
           const seconds = Math.floor(video.duration);
           duration.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
@@ -959,15 +956,18 @@ document.addEventListener('DOMContentLoaded', () => {
     ['loadedmetadata', 'play', 'pause', 'ended', 'emptied', 'seeked'].forEach(event => {
       video.addEventListener(event, updateVideoControls);
     });
-    tabletVideoPreview.addEventListener('change', updateVideoControls);
+    touchVideoPreview.addEventListener('change', updateVideoControls);
+    phoneVideoPreview.addEventListener('change', updateVideoControls);
     updateVideoControls();
 
     playButton.addEventListener('click', () => {
       video.play().catch(error => {
+        updateVideoControls();
         if (error.name !== 'AbortError') {
           console.error('Video playback could not be started.', error);
         }
       });
+      updateVideoControls();
     });
     video.addEventListener('play', () => {
       if (video.paused) return;

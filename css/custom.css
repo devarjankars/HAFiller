@@ -2590,7 +2590,7 @@ th {
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 4px 20px rgb(0 0 0 / 14%);
-  color: #b35b6d;
+  color: var(--color-brand);
   cursor: pointer;
 }
 
@@ -2602,7 +2602,7 @@ th {
 }
 
 .video-play-overlay:focus-visible {
-  outline: 3px solid #b35b6d;
+  outline: 3px solid var(--color-brand);
   outline-offset: 4px;
 }
 
