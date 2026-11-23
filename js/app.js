@@ -26,6 +26,10 @@
  * @param {'home'|'app'} viewId
  */
 function showView(viewId) {
+  if (viewId === 'home' && document.getElementById('app').classList.contains('active') &&
+      typeof clearAllProducts === 'function' && getTotalSelectedCount() > 0) {
+    clearAllProducts();
+  }
   if (viewId !== 'app') {
     closeRheologyPopups();
     resetOverviewVideos();
@@ -924,6 +928,31 @@ document.addEventListener('DOMContentLoaded', () => {
     playButton.setAttribute('aria-label', `Play ${video.getAttribute('aria-label') || 'video'}`);
     playButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.8v16.4L21 12 7 3.8Z" fill="currentColor"/></svg>';
     player.appendChild(playButton);
+
+    if (video.closest('#physicochemicalInfoModal')) {
+      const phone = window.matchMedia('(max-width: 599px) and (orientation: portrait)');
+      const duration = document.createElement('span');
+      duration.className = 'video-preview-duration';
+      duration.hidden = true;
+      player.appendChild(duration);
+
+      const updatePreview = () => {
+        const showPreview = phone.matches && video.paused && video.currentTime === 0;
+        video.controls = !showPreview;
+        player.classList.toggle('has-preview-play', showPreview);
+        if (showPreview) playButton.hidden = false;
+        duration.hidden = !showPreview || !Number.isFinite(video.duration);
+        if (!duration.hidden) {
+          const seconds = Math.floor(video.duration);
+          duration.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+        }
+      };
+      ['loadedmetadata', 'play', 'pause', 'ended', 'emptied'].forEach(event => {
+        video.addEventListener(event, updatePreview);
+      });
+      phone.addEventListener('change', updatePreview);
+      updatePreview();
+    }
 
     playButton.addEventListener('click', () => {
       video.play().catch(error => {

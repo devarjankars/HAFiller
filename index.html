@@ -456,7 +456,11 @@
                 <img src="./assets/images/PhysicoChemical_2.svg" alt="Illustration of water uptake in tissue" />
                 <button type="button" class="physio-video-placeholder"
                   aria-label="Play water uptake assay video" onclick="openPhysicochemicalPopup(this, true)">
-                  <span class="overview-play-icon" aria-hidden="true">▶</span>
+                  <span class="overview-play-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 4.5v15L20 12 8 4.5Z" />
+                    </svg>
+                  </span>
                 </button>
               </div>
               <div class="physio-text">
@@ -834,7 +838,9 @@
               <div class="modal-header">
                 <h4>Confirm</h4>
                 <button type="button" class="modal-close" aria-label="Close"
-                  onclick="closeModal('confirmClearAllModal')">&#10005;</button>
+                  onclick="closeModal('confirmClearAllModal')">
+                  <svg width="16" height="16" aria-hidden="true"><use href="#popup-close-icon" /></svg>
+                </button>
               </div>
               <div class="modal-body">
                 <p style="font-size:1.1rem;">This will clear all selected products. Do you want to continue?</p>
@@ -1172,7 +1178,9 @@
       <div class="modal-header">
         <h4>Save selection</h4>
         <button type="button" class="modal-close" aria-label="Close"
-          onclick="closeModal('saveSelectionModal')">&#10005;</button>
+          onclick="closeModal('saveSelectionModal')">
+          <svg width="16" height="16" aria-hidden="true"><use href="#popup-close-icon" /></svg>
+        </button>
       </div>
       <div class="modal-body">
         <label for="savedSelectionName">Selection name</label>
@@ -1218,7 +1226,9 @@
             onclick="switchManufacturingTopic(this, 'mechanical-properties-panel')">Mechanical Properties</button>
         </div>
         <button type="button" class="manufacturing-modal-close" aria-label="Close manufacturing details"
-          onclick="closeModal('manufacturingInfoModal')">×</button>
+          onclick="closeModal('manufacturingInfoModal')">
+          <svg width="14" height="14" aria-hidden="true"><use href="#popup-close-icon" /></svg>
+        </button>
       </div>
 
       <div class="manufacturing-modal-content">
@@ -1531,7 +1541,9 @@
         </div>
       </div>
       <button type="button" class="modal-close rheology-popup-close" aria-label="Close rheology details"
-        onclick="closeModal('rheologyInfoModal')">×</button>
+        onclick="closeModal('rheologyInfoModal')">
+        <svg width="18" height="18" aria-hidden="true"><use href="#popup-close-icon" /></svg>
+      </button>
         
     </div>
   </div>
@@ -1583,9 +1595,17 @@
         </p>
       </div>
       <button type="button" class="modal-close rheology-popup-close" aria-label="Close water uptake details"
-        onclick="closeModal('physicochemicalInfoModal')">×</button>
+        onclick="closeModal('physicochemicalInfoModal')">
+        <svg width="18" height="18" aria-hidden="true"><use href="#popup-close-icon" /></svg>
+      </button>
     </div>
   </div>
+
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <symbol id="popup-close-icon" viewBox="0 0 18 18">
+      <path d="M3 3l12 12M15 3 3 15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    </symbol>
+  </svg>
 
   <!-- References modal -->
   <div class="modal-overlay" id="referencesModal">
