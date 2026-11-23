@@ -250,6 +250,7 @@
 
     .overview-stress-media figcaption {
         min-width: 0;
+        min-height: 2.25rem;
         padding: 0.3rem 0.4rem;
         font-size: 0.6rem;
         white-space: normal;
@@ -2276,6 +2277,14 @@
 @media (max-width: 599px) and (orientation: portrait) {
     #physicochemicalInfoModal .physio-popup {
         max-height: 90dvh;
+    }
+
+    .physio-card-visual {
+        height: 200px;
+    }
+
+    .physio-card-visual > img {
+        height: 180px;
     }
 
     #physico-popup-title {
