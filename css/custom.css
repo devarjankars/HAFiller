@@ -2235,6 +2235,10 @@ th {
   font-weight: 500;
 }
 
+#tableContainer th {
+  text-align: center;
+}
+
 /* Footer notes */
 .footer-note {
   font-size: 10px;
@@ -2410,7 +2414,12 @@ th {
 }
 
 .overview-stress-media figcaption {
+  position: relative;
   min-width: 90px;
+  width: min(100%, clamp(7.25rem, 10vw, 11.25rem));
+  min-height: 2.25rem;
+  display: grid;
+  place-items: center;
   padding: 0.35rem 0.75rem;
   border: 1px solid #d0d4db;
   border-radius: 8px;
@@ -2418,6 +2427,19 @@ th {
   color: #4a5568;
   font-size: 0.92rem;
   text-align: center;
+}
+
+.overview-stress-media figcaption::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid #d0d4db;
+  border-left: 1px solid #d0d4db;
+  background: #fff;
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .overview-flow {
