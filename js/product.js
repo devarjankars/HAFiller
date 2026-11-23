@@ -6161,6 +6161,8 @@ function clearAllProducts() {
 
 function resetProductSelection() {
   state.activeBrand = "All";
+  state.searchTerm = "";
+  document.getElementById("brandSearch").value = "";
   sectionsDiv.style.display = "none";
   closeSavedListDropdown();
   clearAllProducts();
