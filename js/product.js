@@ -5861,8 +5861,14 @@ document.getElementById("brandSort").addEventListener("change", (e) => {
 
 // searching
 document.getElementById("brandSearch").addEventListener("input", (e) => {
-  state.searchTerm = e.target.value.toLowerCase();
-  renderAll();
+  state.searchTerm = e.target.value.trim().toLowerCase();
+  const matchingBrands = getMatchingBrands();
+  if (state.searchTerm && !matchingBrands.some(({ brand }) => brand === state.activeBrand)) {
+    state.activeBrand = matchingBrands[0]?.brand ?? "All";
+    if (matchingBrands.length) sectionsDiv.style.display = "block";
+    sectionsDiv.scrollTop = 0;
+  }
+  renderAll(matchingBrands);
 });
 
 // initialize selected sets
@@ -6179,25 +6185,31 @@ function deleteSavedList(name) {
   renderSavedListsDropdown();
 }
 
+function getMatchingBrands() {
+  return brands
+    .filter(({ brand }) => brand.toLowerCase().includes(state.searchTerm))
+    .sort((a, b) => state.sortOrder === "asc"
+      ? a.brand.localeCompare(b.brand)
+      : b.brand.localeCompare(a.brand));
+}
+
 // Render brand filter pills
-function renderFilters() {
+function renderFilters(matchingBrands) {
   const filtersEl = document.getElementById('products');
   if (!filtersEl) return;
   filtersEl.innerHTML = '';
 
-  brands
-    .filter((b) => b.brand.toLowerCase().includes(state.searchTerm))
-    .sort((a, b) => {
-      if (state.sortOrder === 'asc') {
-        return a.brand.localeCompare(b.brand);
-      } else {
-        return b.brand.localeCompare(a.brand);
-      }
-    })
-    .forEach((b) => {
-      const pill = makePill(b.brand, b.brand === state.activeBrand);
-      filtersEl.appendChild(pill);
-    });
+  if (!matchingBrands.length) {
+    const message = document.createElement("p");
+    message.className = "brand-search-empty";
+    message.setAttribute("role", "status");
+    message.textContent = "No matching brands.";
+    filtersEl.appendChild(message);
+  }
+
+  matchingBrands.forEach(({ brand }) => {
+    filtersEl.appendChild(makePill(brand, brand === state.activeBrand));
+  });
 }
 
 // creating brands
@@ -6445,8 +6457,9 @@ function toggleSelectAll(brand) {
 }
 
 // 7️⃣ Full re-render
-function renderAll() {
-  renderFilters();
+function renderAll(matchingBrands = getMatchingBrands()) {
+  if (!matchingBrands.length) sectionsDiv.style.display = "none";
+  renderFilters(matchingBrands);
   renderSections();
 }
 // LiftCapacity graph

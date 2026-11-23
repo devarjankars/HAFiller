@@ -1681,6 +1681,11 @@ left: 5vw;
   overflow-y: auto;
 }
 
+.brand-search-empty {
+  padding: 1rem;
+  color: var(--color-text-sub);
+}
+
 .stats-bar {
   display: flex;
   flex-wrap: wrap;
