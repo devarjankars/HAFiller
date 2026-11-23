@@ -2638,7 +2638,14 @@
     }
 
     .sidebar .sidebar-timeline {
+        --timeline-axis: -10.5px;
         margin-top: 6px;
+    }
+
+    .sidebar .timeline-item::after {
+        left: calc(var(--timeline-axis) - 0.5px);
+        width: 1px;
+        background: #475061;
     }
 
     .sidebar .timeline-item,
@@ -2662,9 +2669,11 @@
         border: 1px solid #d0d0d0;
         border-radius: 40px;
         background: #fff;
+        -webkit-text-stroke: 0.25px currentColor;
     }
 
     .sidebar .timeline-item.active::before {
         display: block;
+        left: calc(var(--timeline-axis) - 2px);
     }
 }
