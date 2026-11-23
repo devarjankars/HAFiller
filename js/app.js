@@ -916,6 +916,11 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('orientationchange', updateOrientationLock);
   updateOrientationLock();
 
+  const tabletVideoPreview = window.matchMedia(
+    '(orientation: landscape) and (min-width: 951px) and (max-width: 1366px) and (any-pointer: coarse)'
+  );
+  const phoneVideoPreview = window.matchMedia('(max-width: 599px) and (orientation: portrait)');
+
   document.querySelectorAll('video').forEach(video => {
     const player = document.createElement('div');
     player.className = 'video-player';
@@ -929,30 +934,33 @@ document.addEventListener('DOMContentLoaded', () => {
     playButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.8v16.4L21 12 7 3.8Z" fill="currentColor"/></svg>';
     player.appendChild(playButton);
 
-    if (video.closest('#physicochemicalInfoModal')) {
-      const phone = window.matchMedia('(max-width: 599px) and (orientation: portrait)');
-      const duration = document.createElement('span');
+    const duration = video.closest('#physicochemicalInfoModal') ? document.createElement('span') : null;
+    if (duration) {
       duration.className = 'video-preview-duration';
       duration.hidden = true;
       player.appendChild(duration);
+      phoneVideoPreview.addEventListener('change', updateVideoControls);
+    }
 
-      const updatePreview = () => {
-        const showPreview = phone.matches && video.paused && video.currentTime === 0;
-        video.controls = !showPreview;
-        player.classList.toggle('has-preview-play', showPreview);
-        if (showPreview) playButton.hidden = false;
+    function updateVideoControls() {
+      const usePreview = tabletVideoPreview.matches || (duration && phoneVideoPreview.matches);
+      const showPreview = usePreview && video.paused && video.currentTime === 0 && !video.ended;
+      video.controls = !showPreview;
+      player.classList.toggle('has-preview-play', showPreview);
+      playButton.hidden = usePreview ? !showPreview : !video.paused && !video.ended;
+      if (duration) {
         duration.hidden = !showPreview || !Number.isFinite(video.duration);
         if (!duration.hidden) {
           const seconds = Math.floor(video.duration);
           duration.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
         }
-      };
-      ['loadedmetadata', 'play', 'pause', 'ended', 'emptied'].forEach(event => {
-        video.addEventListener(event, updatePreview);
-      });
-      phone.addEventListener('change', updatePreview);
-      updatePreview();
+      }
     }
+    ['loadedmetadata', 'play', 'pause', 'ended', 'emptied', 'seeked'].forEach(event => {
+      video.addEventListener(event, updateVideoControls);
+    });
+    tabletVideoPreview.addEventListener('change', updateVideoControls);
+    updateVideoControls();
 
     playButton.addEventListener('click', () => {
       video.play().catch(error => {
@@ -963,7 +971,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     video.addEventListener('play', () => {
       if (video.paused) return;
-      playButton.hidden = true;
       if (video.classList.contains('overview-video')) {
         document.querySelectorAll('.overview-video').forEach(other => {
           if (other !== video) other.pause();
@@ -978,15 +985,6 @@ document.addEventListener('DOMContentLoaded', () => {
           player.scrollIntoView({ block: 'center', inline: 'nearest' });
         }
       }
-    });
-    video.addEventListener('pause', () => {
-      playButton.hidden = false;
-    });
-    video.addEventListener('ended', () => {
-      playButton.hidden = false;
-    });
-    video.addEventListener('emptied', () => {
-      playButton.hidden = false;
     });
   });
 
