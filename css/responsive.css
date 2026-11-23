@@ -692,6 +692,14 @@
         padding: 1.25rem 1rem;
     }
 
+    #mechanical {
+        padding-bottom: 0;
+    }
+
+    #mechanical > .overview-footer {
+        padding-bottom: 1.25rem;
+    }
+
     /* Media grid — stack */
     /* .media-grid {
         flex-direction: column;
@@ -2218,20 +2226,36 @@
     }
 }
 
-/* Both manufacturing pages share a stationary pagination / reference footer. */
+/* Keep Overview and Manufacturing pagination below the scrolling page content. */
 @media (min-width: 951px) {
+    #mechanical.active,
     #properties-content.active {
         height: 100%;
         min-height: 0;
         overflow: hidden;
     }
 
+    #mechanical > .overview-page-content,
     #properties-content .manufacturing-page:not([hidden]) {
         flex: 1 1 0;
         min-height: 0;
         overflow-x: hidden;
         overflow-y: auto;
         scrollbar-gutter: stable;
+    }
+
+    #manufacturing-page-1 {
+        padding-inline-end: 0.75rem;
+    }
+
+    #mechanical > .overview-footer {
+        position: static;
+        margin-top: clamp(0.75rem, 1.6vh, 1.25rem);
+    }
+
+    #mechanical > .overview-footer > .overview-footnote {
+        min-height: 2.5em;
+        margin-top: 0;
     }
 
     #properties-content > .manufacturing-footer {

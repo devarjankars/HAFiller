@@ -6017,6 +6017,17 @@ if (savedListToggle && savedListDropdown) {
   });
 }
 
+function syncSaveSelectionViewport() {
+  const modal = document.getElementById("saveSelectionModal");
+  const viewport = window.visualViewport;
+  if (!viewport || !modal?.classList.contains("open")) return;
+  modal.style.setProperty("--save-viewport-top", `${viewport.offsetTop}px`);
+  modal.style.setProperty("--save-viewport-height", `${viewport.height}px`);
+}
+
+window.visualViewport?.addEventListener("resize", syncSaveSelectionViewport);
+window.visualViewport?.addEventListener("scroll", syncSaveSelectionViewport);
+
 function openSaveSelectionModal() {
   const errorMessage = document.getElementById("savedSelectionError");
   const nameInput = document.getElementById("savedSelectionName");
@@ -6028,6 +6039,7 @@ function openSaveSelectionModal() {
       errorMessage.hidden = false;
     }
     openModal("saveSelectionModal");
+    syncSaveSelectionViewport();
     return;
   }
 
@@ -6036,7 +6048,8 @@ function openSaveSelectionModal() {
     errorMessage.hidden = true;
   }
   openModal("saveSelectionModal");
-  if (nameInput) nameInput.focus();
+  syncSaveSelectionViewport();
+  if (nameInput) nameInput.focus({ preventScroll: true });
 }
 
 function saveCurrentSelection(event) {
