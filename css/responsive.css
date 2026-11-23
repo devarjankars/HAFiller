@@ -938,7 +938,6 @@
     .mobile-region-preview:not([hidden]) {
         display: block;
         margin-top: 10px;
-        border: 1px solid #dedede;
         border-radius: 12px;
         background: #fff;
         overflow: hidden;
@@ -1558,7 +1557,7 @@
 
 #mechanical > .overview-footer {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
 }
 
 .overview-footnote{
@@ -2275,6 +2274,36 @@
 
 /* Phone home and navigation reference. Tablet and desktop rules stay intact. */
 @media (max-width: 599px) and (orientation: portrait) {
+    #physicochemicalInfoModal .physio-popup {
+        max-height: 90dvh;
+    }
+
+    #physico-popup-title {
+        font-size: clamp(1.25rem, 6.4vw, 1.5rem);
+        line-height: 1.25;
+    }
+
+    #physicochemicalInfoModal .rheology-popup-header {
+        padding: 1rem 3.75rem 0.65rem 1rem;
+    }
+
+    #physicochemicalInfoModal .elasticity-video-placeholder {
+        aspect-ratio: 16 / 10;
+        min-height: 0;
+        object-fit: cover;
+    }
+
+    #physicochemicalInfoModal .has-preview-play > .video-play-overlay:not([hidden]) {
+        display: grid;
+        width: 48px;
+        height: 48px;
+    }
+
+    #physicochemicalInfoModal .video-play-overlay svg {
+        width: 21px;
+        height: 21px;
+    }
+
     /* Match the rounded assay dialogs and inset panels in the mobile design. */
     .rheology-popup,
     .manufacturing-modal {
@@ -2580,6 +2609,18 @@
 
     .sidebar .timeline-item.active::before {
         display: none;
+    }
+}
+
+@media (min-width: 901px) {
+    #physicochemicalInfoModal .rheology-popup-header {
+        border-bottom: 1px solid var(--color-stroke);
+    }
+}
+
+@media (min-width: 1367px) and (max-width: 1599px) {
+    #FillerSelection .selected-area-image #image_marker {
+        max-width: max(0px, calc(100% - 600px - 2vw - 1rem));
     }
 }
 

@@ -1111,6 +1111,13 @@ font-size: clamp(0.94rem, 2vw, 1.25rem);
   outline-offset: 5px;
 }
 
+.physio-video-placeholder .overview-play-icon {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 14%);
+}
+
 .physio-text {
   padding: 1rem 1.25rem;
 }
@@ -2593,6 +2600,17 @@ th {
   display: none;
 }
 
+.video-preview-duration:not([hidden]) {
+  position: absolute;
+  inset: auto 0.75rem 0.75rem auto;
+  padding: 0.2rem 0.45rem;
+  border-radius: 5px;
+  background: rgb(24 31 47 / 85%);
+  color: #fff;
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+
 .orientation-lock {
   position: fixed;
   inset: 0;
@@ -3776,6 +3794,8 @@ position: absolute;
 }
 
 .modal-close {
+  display: inline-grid;
+  place-items: center;
   background: transparent;
       border: 1px solid #475061;
   font-size: 1.2rem;
