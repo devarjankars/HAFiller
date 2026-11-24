@@ -920,6 +920,27 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('orientationchange', updateOrientationLock);
   updateOrientationLock();
 
+  const portraitLayout = window.matchMedia(
+    '(orientation: portrait) and (min-width: 951px) and (max-width: 1366px)'
+  );
+  const viewport = window.visualViewport;
+  if (viewport) {
+    const syncPortraitViewport = () => {
+      const root = document.documentElement;
+      if (!portraitLayout.matches || viewport.scale !== 1) {
+        root.style.removeProperty('--portrait-viewport-inset');
+        return;
+      }
+      // Safari's toolbars can cover part of the layout viewport.
+      const inset = Math.max(0, root.clientHeight - viewport.height - viewport.offsetTop);
+      root.style.setProperty('--portrait-viewport-inset', `${inset}px`);
+    };
+    viewport.addEventListener('resize', syncPortraitViewport);
+    viewport.addEventListener('scroll', syncPortraitViewport);
+    portraitLayout.addEventListener('change', syncPortraitViewport);
+    syncPortraitViewport();
+  }
+
   const touchVideoPreview = window.matchMedia('(any-pointer: coarse)');
   const phoneVideoPreview = window.matchMedia('(max-width: 599px) and (orientation: portrait)');
 
