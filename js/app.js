@@ -889,7 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
     '(orientation: landscape) and (max-width: 950px)'
   );
   const tabletPortraitQuery = window.matchMedia(
-    '(orientation: portrait) and (min-width: 600px) and (max-width: 1100px)'
+    '(orientation: portrait) and (min-width: 600px) and (width < 951px)'
   );
   const orientationLock = document.querySelector('.orientation-lock');
   let previouslyFocusedElement = null;
