@@ -1829,9 +1829,10 @@
 
 @media (min-width: 951px) and (max-width: 1440px) {
     .sidebar {
+        --sidebar-scrollbar-thumb: #8b8b8b;
         scrollbar-gutter: stable;
         scrollbar-width: thin;
-        scrollbar-color: var(--color-brand-border) transparent;
+        scrollbar-color: var(--sidebar-scrollbar-thumb) transparent;
     }
 
     .sidebar::-webkit-scrollbar {
@@ -1845,7 +1846,23 @@
     .sidebar::-webkit-scrollbar-thumb {
         border: 2px solid var(--color-brand-light);
         border-radius: 8px;
-        background: var(--color-brand-border);
+        background: var(--sidebar-scrollbar-thumb);
+    }
+}
+
+@media (orientation: portrait) and (min-width: 951px) and (max-width: 1366px) {
+    #home {
+        height: 100vh;
+        height: 100svh;
+        min-height: 0;
+    }
+
+    #home .home-footer {
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    #app > .mainContainer {
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
     }
 }
 
