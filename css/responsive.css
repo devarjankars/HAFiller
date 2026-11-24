@@ -1850,22 +1850,6 @@
     }
 }
 
-@media (orientation: portrait) and (min-width: 951px) and (max-width: 1366px) {
-    #home {
-        height: 100vh;
-        height: 100svh;
-        min-height: 0;
-    }
-
-    #home .home-footer {
-        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    }
-
-    #app > .mainContainer {
-        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
-    }
-}
-
 @media (orientation: landscape) and (min-width: 951px) and (max-width: 1366px) and (max-height: 768px) {
     #rheology-content .rheology-intro {
         margin-bottom: clamp(0.75rem, 3vh, 1.5rem);
@@ -2324,6 +2308,76 @@
 
     #manufacturing-page-2 .mfg-card {
         padding: clamp(0.75rem, min(1.76vw, 2.34vh), 2rem);
+    }
+}
+
+/* Let the document scroll in tablet portrait, including below the browser toolbar. */
+@media (orientation: portrait) and (min-width: 951px) and (max-width: 1366px) {
+    html:not(.modal-open),
+    body:not(.modal-open) {
+        height: auto;
+        overflow-y: auto;
+    }
+
+    #home,
+    #app.active {
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
+    }
+
+    #home main {
+        min-height: 34rem;
+    }
+
+    #home .home-footer {
+        position: relative;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    #app > .mainContainer,
+    #app .main-content {
+        height: auto;
+        overflow: visible;
+    }
+
+    #app > .mainContainer {
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    #sidebar {
+        height: calc(100svh - 3rem);
+        top: 1.5rem;
+    }
+
+    #mechanical.active,
+    #properties-content.active,
+    #product-selection.active {
+        height: auto;
+        min-height: calc(100svh - 3rem);
+        overflow: visible;
+    }
+
+    #mechanical > .overview-page-content,
+    #properties-content .manufacturing-page:not([hidden]) {
+        flex: 1 0 auto;
+        overflow: visible;
+    }
+
+    #mechanical > .overview-footer,
+    #properties-content > .manufacturing-footer {
+        position: sticky;
+        bottom: env(safe-area-inset-bottom, 0px);
+        z-index: 1;
+        background: #fff;
+    }
+
+    #product-selection .product-layout {
+        height: clamp(24rem, 59svh, 56rem);
+    }
+
+    #FillerSelection.active {
+        height: calc(100svh - 3rem) !important;
     }
 }
 
